@@ -1,0 +1,24 @@
+<!-- La view listar artículos -->
+<section ng-controller="ArticlesController" ng-init="find()">
+	<h1>Artículos</h1>
+	<ul>
+		<!-- La lista de artículos -->
+		<li ng-repeat="article in articles">
+			<a ng-href="#!/articles/{{article._id}}" ng-bind="article.titulo"></a>
+			<br>
+			<small ng-bind="article.creado | date:'medium'"></small>
+			<small>/</small>
+			<small ng-bind="article.creador.fullName"></small>
+			<p ng-bind="article.contenido"></p>
+			<!-- Mostrar los botones de edición para artículo creado -->
+    <p ng-show="authentication.user._id == article.creador._id">
+        <a href="/#!/articles/{{article._id}}/edit">editar</a>
+        <a href="/#!/articles/{{article._id}}" ng-click="delete();">borrar</a>
+    </p>
+		</li>
+	</ul>
+	<!-- Si no hay artículos en la lista, sugire al usuario que cree un nuevo artículo -->
+	<div ng-hide="!articles || articles.length">
+		Aún no hay artículos, porque no creas <a href="/#!/articles/create">el primero</a>?
+	</div>
+</section>

@@ -1,0 +1,26 @@
+<!-- Crear la View Articles -->
+<section ng-controller="ArticlesController">
+	<h1>Nuevo Artículo</h1>
+	<!-- El formulario nuevo artículo -->
+	<form ng-submit="create()" novalidate>
+		<div>
+			<label for="titulo">Titulo</label>
+			<div>
+				<input type="text" ng-model="titulo" id="titulo" placeholder="Titulo" required>
+			</div>
+		</div>
+		<div>
+			<label for="contenido">Contenido</label>
+			<div>
+				<textarea ng-model="contenido" id="contenido" cols="30" rows="10" placeholder="Contenido"></textarea>
+			</div>
+		</div>
+		<div>
+			<input type="submit">
+		</div>
+		<!-- El elemento mensaje de error -->
+		<div ng-show="error">
+			<strong ng-bind="error"></strong>
+		</div>
+	</form>
+</section>

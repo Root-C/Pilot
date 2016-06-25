@@ -1,0 +1,27 @@
+<!-- La view editar artículo -->
+<section ng-controller="ArticlesController" ng-init="findOne()">
+	<h1>Editar Artículo</h1>
+	<!-- Formulario editar artículo -->
+	<form ng-submit="update()" novalidate>
+		<div>
+			<label for="titulo">Titulo</label>
+			<div>
+				<input type="text" ng-model="article.titulo" id="titulo" placeholder="Titulo" required>
+			</div>
+		</div>
+		<div>
+			<label for="contenido">Contenido</label>
+			<div>
+				<textarea ng-model="article.contenido" id="contenido" cols="30" rows="10" placeholder="Contenido"></textarea>
+			</div>
+		</div>
+		<div>
+			<input type="submit" value="Actualizar">
+		</div>
+		<!-- El elemento mensaje error -->
+		<div ng-show="error">
+			<strong ng-bind="error"></strong>
+		</div>
+	</form>
+	</div>
+</section>
