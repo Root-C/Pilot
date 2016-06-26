@@ -10,11 +10,18 @@ module.exports = function() {
 	// Usar Mongoose para conectar a MongoDB
 	var db = mongoose.connect(config.db);
 
+	//Cargar el modelo distritos
+	require('../app/models/distrito.server.model');
+
 	// Cargar el modelo 'User' 
 	require('../app/models/user.server.model');
 
     // Cargar el modelo 'Article'
 	require('../app/models/article.server.model');
+
+ 	// Cargar el modelo 'Cliente'
+	require('../app/models/cliente.server.model');
+
 
 	// Devolver la instancia de conexión a Mongoose
 	return db;

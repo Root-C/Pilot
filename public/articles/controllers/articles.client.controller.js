@@ -1,14 +1,15 @@
 // Invocar modo JavaScript 'strict'
 'use strict';
 
-// Crear el controller 'articles' --> Que llam a a los servicios Articles
-angular.module('articles').controller('ArticlesController', ['$scope', '$routeParams', '$location', 'Authentication', 'Articles',
-    function($scope, $routeParams, $location, Authentication, Articles) {
+// Crear el controller 'articles' --> Que llama a los servicios Articles
+angular.module('articles').controller('ArticlesController', 
+    ['$scope', '$routeParams', '$location', 'Authentication', 'Articles','Distritos',
+    function($scope, $routeParams, $location, Authentication, Articles,Distritos) {
         // Exponer el service Authentication
         $scope.authentication = Authentication;
 
  // Crear un nuevo método controller para crear nuevos articles
-        $scope.create = function() {
+        $scope.createArticle = function() {
             // Usar los campos form para crear un nuevo objeto $resource article
             var article = new Articles({
                 titulo: this.titulo,
@@ -26,13 +27,14 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$routePa
         };
 
 // Crear un nuevo método controller para recuperar una lista de artículos
-        $scope.find = function() {
+        $scope.findArticle = function() {
             // Usar el método 'query' de article para enviar una petición GET apropiada
             $scope.articles = Articles.query();
+  
         };
 
         // Crear un nuevo método controller para recuperar un unico artículo
-        $scope.findOne = function() {
+        $scope.findOneArticle = function() {
             // Usar el método 'get' de article para enviar una petición GET apropiada
             $scope.article = Articles.get({
                 articleId: $routeParams.articleId
@@ -40,7 +42,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$routePa
         };
 
  // Crear un nuevo método controller para actualizar un único article
-        $scope.update = function() {
+        $scope.updateArticle = function() {
             // Usar el método '$update' de article para enviar una petición PUT apropiada
             $scope.article.$update(function() {
                 // Si un article fue actualizado de modo correcto, redirigir el user a la página del article 
@@ -52,7 +54,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$routePa
         };
 
 // Crear un nuevo método controller para borrar un único artículo
-        $scope.delete = function(article) {
+        $scope.deleteArticle = function(article) {
             // Si un artículo fue enviado al método, borrarlo
             if (article) {
                 // Usar el método '$remove' del artículo para borrar el artículo

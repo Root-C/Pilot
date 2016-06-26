@@ -1,5 +1,5 @@
 <!-- La view listar artículos -->
-<section ng-controller="ArticlesController" ng-init="find()">
+<section ng-controller="ArticlesController" ng-init="findArticle()">
 	<h1>Artículos</h1>
 	<ul>
 		<!-- La lista de artículos -->
@@ -10,10 +10,11 @@
 			<small>/</small>
 			<small ng-bind="article.creador.fullName"></small>
 			<p ng-bind="article.contenido"></p>
+
 			<!-- Mostrar los botones de edición para artículo creado -->
     <p ng-show="authentication.user._id == article.creador._id">
         <a href="/#!/articles/{{article._id}}/edit">editar</a>
-        <a href="/#!/articles/{{article._id}}" ng-click="delete();">borrar</a>
+        <a href="/#!/articles/{{article._id}}" ng-click="deleteArticle();">borrar</a>
     </p>
 		</li>
 	</ul>

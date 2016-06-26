@@ -1,5 +1,5 @@
 <!-- La view artículo -->
-<section ng-controller="ArticlesController" ng-init="findOne()">
+<section ng-controller="ArticlesController" ng-init="findOneArticle()">
     <h1 ng-bind="article.titulo"></h1>
     <!-- Mostrar los botones de edición para artículo creado -->
     <div ng-show="authentication.user._id == article.creador._id">

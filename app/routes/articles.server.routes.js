@@ -21,3 +21,4 @@ module.exports = function(app) {
 	// Configurar el parámetro middleware 'articleId'   
 	app.param('articleId', articles.articleByID);
 };
+

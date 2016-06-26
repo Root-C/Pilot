@@ -1,8 +1,8 @@
 <!-- La view editar artículo -->
-<section ng-controller="ArticlesController" ng-init="findOne()">
+<section ng-controller="ArticlesController" ng-init="findOneArticle()">
 	<h1>Editar Artículo</h1>
 	<!-- Formulario editar artículo -->
-	<form ng-submit="update()" novalidate>
+	<form ng-submit="updateArticle()" novalidate>
 		<div>
 			<label for="titulo">Titulo</label>
 			<div>

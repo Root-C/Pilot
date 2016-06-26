@@ -1,0 +1,75 @@
+<!-- Crear la View Articles -->
+<section ng-controller="ClientesController" ng-init="findClient()">
+	<h1>Nuevo Cliente</h1>
+	<!-- El formulario nuevo artículo -->
+	<form ng-submit="createClient()" novalidate>
+		<div>
+			<label for="nombre_cliente">Nomre</label>
+			<div>
+				<input type="text" ng-model="nombre_cliente" id="nombre_cliente" placeholder="Ingrese nombre" required>
+			</div>
+		</div>
+		<div>
+			<label for="ape_pat_cliente">Apellido Paterno</label>
+			<div>
+				<input type="text" ng-model="ape_pat_cliente" id="ape_pat_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
+			</div>
+		</div>
+
+		<div>
+			<label for="ape_mat_cliente">Apellido Materno</label>
+			<div>
+				<input type="text" ng-model="ape_mat_cliente" id="ape_mat_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
+			</div>
+		</div>
+
+		<div>
+			<label for="dni_cliente">DNI</label>
+			<div>
+				<input type="text" ng-model="dni_cliente" id="dni_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
+			</div>
+		</div>
+
+		<div>
+			<label for="direccion_cliente">Direccion</label>
+			<div>
+				<input type="text" ng-model="direccion_cliente" id="direccion_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
+			</div>
+		</div>
+
+		<div>
+			<label for="celular_cliente">Celular</label>
+			<div>
+				<input type="text" ng-model="celular_cliente" id="celular_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
+			</div>
+		</div>
+
+
+		<div>
+			<label for="fijo_cliente">Telf Fijo</label>
+			<div>
+				<input type="text" ng-model="fijo_cliente" id="fijo_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
+			</div>
+		</div>
+
+		<div>
+			<label for="distrito">Distrito</label>
+			<div>
+				<select ng-model="distrito">
+					<option ng-selected="distrito == item._id" ng-repeat="item in distritos" ng-value="item._id">{{item.distrito}}</option>
+				</select>
+
+			</div>
+		</div>
+
+
+
+		<div>
+			<input type="submit">
+		</div>
+		<!-- El elemento mensaje de error -->
+		<div ng-show="error">
+			<strong ng-bind="error"></strong>
+		</div>
+	</form>
+</section>
