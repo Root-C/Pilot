@@ -52,6 +52,7 @@ module.exports = function() {
   require('../app/routes/users.server.routes.js')(app);
   require('../app/routes/articles.server.routes.js')(app);
   require('../app/routes/clientes.server.routes.js')(app);
+  require('../app/routes/boletas.server.routes.js')(app);
 
 
 
