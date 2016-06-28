@@ -63,7 +63,7 @@ exports.boletaByID = function(req, res, next, id) {
 	// Usar el método model 'findById' para encontrar un único artículo 
 	Boleta.findById(id).populate('idcliente', 'nombre_cliente').exec(function(err, boletas) {
 		if (err) return next(err);
-		if (!boleta) return next(new Error('Fallo al cargar el artículo ' + id));
+		if (!boletas) return next(new Error('Fallo al cargar la boleta ' + id));
 
 		// Si un artículo es encontrado usar el objeto 'request' para pasarlo al siguietne middleware
 		req.boleta = boletas;
