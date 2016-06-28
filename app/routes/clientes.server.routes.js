@@ -13,12 +13,17 @@ module.exports = function(app) {
 	   .post(users.requiresLogin, clientes.create);
 	
 	// Configurar las rutas 'clientes' parametrizadas
-	app.route('/api/clientes/:articleId')
+	app.route('/api/clientes/:clienteId')
 	   .get(clientes.read)
 	   .put(users.requiresLogin, clientes.hasAuthorization, clientes.update)
 	   .delete(users.requiresLogin, clientes.hasAuthorization, clientes.delete);
 
-	// Configurar el parámetro middleware 'articleId'   
+	 app.route('/api/cliente/:apellido')
+	 	.get(clientes.listapellido);
+
+
+	// Configurar el parámetro middleware 'clienteId'   
 	app.param('clienteId', clientes.clienteByID);
+	app.param('apellido', clientes.clienteByLastName);
 };
 

@@ -3,7 +3,8 @@
 
 // Cargar las dependencias del módulo
 var mongoose = require('mongoose'),
-	Cliente = mongoose.model('Cliente');
+	Cliente = mongoose.model('Cliente'),
+	Distrito = mongoose.model('Distrito');
 
 // Crear un nuevo método controller para el manejo de errores
 var getErrorMessage = function(err) {
@@ -56,6 +57,23 @@ exports.list = function(req, res) {
 	});
 };
 
+
+// Crear un nuevo controller middleware que recupera un único cliente existente
+exports.clienteByID = function(req, res, next, id) {
+	// Usar el método model 'findById' para encontrar un único cliente 
+	Cliente.findById(id).populate('creador', 'firstName lastName fullName').exec(function(err, cliente) {
+		if (err) return next(err);
+		if (!cliente) return next(new Error('Fallo al cargar el cliente ' + id));
+
+		// Si un cliente es encontrado usar el objeto 'request' para pasarlo al siguietne middleware
+		req.cliente = cliente;
+
+		// Llamar al siguiente middleware
+		next();
+	});
+};
+
+
 // Crear un nuevo método controller que devuelve un cliente existente
 exports.read = function(req, res) {
 	res.json(req.cliente);
@@ -105,20 +123,49 @@ exports.delete = function(req, res) {
 	});
 };
 
-// Crear un nuevo controller middleware que recupera un único cliente existente
-exports.clienteByID = function(req, res, next, id) {
-	// Usar el método model 'findById' para encontrar un único cliente 
-	cliente.findById(id).populate('creador', 'firstName lastName fullName').exec(function(err, cliente) {
-		if (err) return next(err);
-		if (!cliente) return next(new Error('Fallo al cargar el cliente ' + id));
 
-		// Si un cliente es encontrado usar el objeto 'request' para pasarlo al siguietne middleware
-		req.cliente = cliente;
+//Buscar Cliente por apellido
+exports.clienteByLastName = function(req, res, next,apellido) {
+	var apellido = req.params.apellido;
+	// Usar el método model 'findById' para encontrar un único cliente 
+		Cliente.find({'ape_pat_cliente' : new RegExp(apellido, 'i')},function(err, clientes) {
+		if(err){
+			
+			console.log(err);
+		}
+		req.cliente = clientes;
 
 		// Llamar al siguiente middleware
 		next();
-	});
+
+        });
+		
+	};
+
+
+
+// Crear un nuevo método controller que devuelve un cliente existente
+exports.listapellido = function(req, res) {
+	res.json(req.cliente);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Crear un nuevo controller middleware que es usado para autorizar una operación cliente 
 exports.hasAuthorization = function(req, res, next) {

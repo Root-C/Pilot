@@ -55,6 +55,24 @@ exports.list = function(req, res) {
 	});
 };
 
+
+// Crear un nuevo controller middleware que recupera un único artículo existente PARAMETRIZA A LOS DEMAS
+exports.articleByID = function(req, res, next, id) {
+	// Usar el método model 'findById' para encontrar un único artículo 
+	Article.findById(id).populate('creador', 'firstName lastName fullName').exec(function(err, article) {
+		if (err) return next(err);
+		if (!article) return next(new Error('Fallo al cargar el artículo ' + id));
+
+		// Si un artículo es encontrado usar el objeto 'request' para pasarlo al siguietne middleware
+		req.article = article;
+
+		// Llamar al siguiente middleware
+		next();
+	});
+};
+
+
+
 // Crear un nuevo método controller que devuelve un artículo existente
 exports.read = function(req, res) {
 	res.json(req.article);
@@ -104,20 +122,7 @@ exports.delete = function(req, res) {
 	});
 };
 
-// Crear un nuevo controller middleware que recupera un único artículo existente
-exports.articleByID = function(req, res, next, id) {
-	// Usar el método model 'findById' para encontrar un único artículo 
-	Article.findById(id).populate('creador', 'firstName lastName fullName').exec(function(err, article) {
-		if (err) return next(err);
-		if (!article) return next(new Error('Fallo al cargar el artículo ' + id));
 
-		// Si un artículo es encontrado usar el objeto 'request' para pasarlo al siguietne middleware
-		req.article = article;
-
-		// Llamar al siguiente middleware
-		next();
-	});
-};
 
 // Crear un nuevo controller middleware que es usado para autorizar una operación article 
 exports.hasAuthorization = function(req, res, next) {

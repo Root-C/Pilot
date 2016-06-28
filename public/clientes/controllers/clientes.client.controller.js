@@ -7,12 +7,13 @@ angular.module('clientes').controller('ClientesController',
     function($scope, $routeParams, $location, Authentication, Clientes, Distritos) {
         // Exponer el service Authentication
         $scope.authentication = Authentication;
-
+        $scope.tablebusqueda=false;
+        $scope.clientedata=[];
  // Crear un nuevo método controller para crear nuevos clientes
         $scope.createClient = function() {
 
             // Usar los campos form para crear un nuevo objeto $resource cliente
-            var cliente = new Clientes({
+            var cliente = new Clientes.ID({
                 nombre_cliente      : this.nombre_cliente,
                 ape_pat_cliente     : this.ape_pat_cliente,
                 ape_mat_cliente     : this.ape_mat_cliente,
@@ -38,7 +39,7 @@ angular.module('clientes').controller('ClientesController',
 // Crear un nuevo método controller para recuperar una lista de clientes
         $scope.findClient = function() {
             // Usar el método 'query' de cliente para enviar una petición GET apropiada
-            $scope.clientes = Clientes.query();
+            $scope.clientes = Clientes.ID.query();
             $scope.distritos = Distritos.query();
             console.log($scope.distritos);
 
@@ -48,10 +49,21 @@ angular.module('clientes').controller('ClientesController',
         // Crear un nuevo método controller para recuperar un unico cliente
         $scope.findOneClient = function() {
             // Usar el método 'get' de cliente para enviar una petición GET apropiada
-            $scope.cliente = Clientes.get({
-                clienteId: $routeParams.clienteId
-            });
+            $scope.clientedata = Clientes.ID.get({clienteId: $routeParams.clienteId});
+            console.log($scope.cliente);
         };
+
+
+        // Capturar cliente por apellido
+        $scope.GetClientbyLastName = function(ape) {
+            // Usar el método 'get' de cliente para enviar una petición GET apropiada
+            $scope.cliente = Clientes.Apellido.get({apellido: ape });
+            $scope.tablebusqueda=true;
+
+            
+           
+        };
+
 
  // Crear un nuevo método controller para actualizar un único cliente
         $scope.updateClient = function() {

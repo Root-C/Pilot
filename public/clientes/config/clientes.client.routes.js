@@ -17,6 +17,9 @@ angular.module('clientes').config(['$routeProvider',
 		}).
 		when('/clientes/:clienteId/edit', {
 			templateUrl: 'clientes/views/edit-cliente.client.view.html'
+		}).
+		when('/hola', {
+			templateUrl: 'clientes/views/search-cliente.client.view.html'
 		});
 	}
 ]); 
