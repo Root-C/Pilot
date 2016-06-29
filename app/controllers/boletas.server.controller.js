@@ -5,6 +5,8 @@
 var mongoose = require('mongoose'),
 	Boleta = mongoose.model('Boleta');
 
+var boletascant=0;
+
 // Crear un nuevo método controller para el manejo de errores
 var getErrorMessage = function(err) {
 	if (err.errors) {
@@ -19,11 +21,15 @@ var getErrorMessage = function(err) {
 
 // Crear un nuevo método controller para crear nuevos artículos
 exports.create = function(req, res) {
+	Boleta.find().count(function(err, count) {
+	boletascant= count+1;
+	
 	// Crear un nuevo objeto artículo
 	var boleta = new Boleta(req.body);
 
 	// Configurar la propiedad 'creador' del artículo
-	boleta.idcliente = req.cliente;
+	boleta.idboleta= boletascant;
+
 
 	// Intentar salvar el artículo
 	boleta.save(function(err) {
@@ -37,7 +43,9 @@ exports.create = function(req, res) {
 			res.json(boleta);
 		}
 	});
+	});
 };
+
 
 
 

@@ -16,14 +16,12 @@ return {
       // {
       // 	update: {method: 'PUT'}
       // }),
-
-
       ID: $resource('api/clientes/:clienteId', 
       {
         clienteId: '@_id'
       }, 
       {
-       'get': { method: 'GET', isArray: true }
+       'get': { method: 'GET', isArray: false }
       }),
 
 
@@ -37,4 +35,8 @@ return {
       })
 
     };
+
+  
+
+
 }]);

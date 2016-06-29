@@ -3,23 +3,26 @@
 
 // Crear el controller 'boletas' --> Que llama a los servicios boletas
 angular.module('boletas').controller('BoletasController', 
-    ['$scope', '$routeParams', '$location', 'Authentication', 'Boletas','Distritos',
-    function($scope, $routeParams, $location, Authentication, Boletas, Distritos) {
+    ['$rootScope','$scope', '$routeParams', '$location', 'Authentication', 'Boletas','Distritos','Clientes',
+    function($rootScope, $scope, $routeParams, $location, Authentication, Boletas, Distritos, Clientes) {
         // Exponer el service Authentication
         $scope.authentication = Authentication;
+        $scope.clientedata=[];
+        
+
 
  // Crear un nuevo método controller para crear nuevos Boletas
         $scope.createBoleta = function() {
             // Usar los campos form para crear un nuevo objeto $resource Boleta
             var boleta = new Boletas({
-                titulo: this.titulo,
-                contenido: this.contenido
+              idcliente: $rootScope.idcliente
             });
 
             // Usar el método '$save' de boleta para enviar una petición POST apropiada
             boleta.$save(function(response) {
                 // Si un artículo fue creado de modo correcto, redireccionar al usuario a la página del artículo 
-                $location.path('boletas/' + response._id);
+                //$location.path('boletas/' + response._id);
+                console.log($rootScope.idcliente);
             }, function(errorResponse) {
                 // En otro caso, presentar al usuario el mensaje de error
                 $scope.error = errorResponse.data.message;

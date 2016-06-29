@@ -22,15 +22,26 @@
 					<td>{{item.direccion_cliente}}</td>
 					<td>{{item.fijo_cliente}}</td>
 					<td>{{item.celular_cliente}}</td>
-					<td>{{item._id}}</td>
 					<td><button class="btn btn-success" ng-click="findOneClient(item._id)">Seleccionar</button></td>
 				</tr>
 		</tbody>
 </table>
 
-<div ng-repeat="d in clientedata">
-Cliente Seleccionado: {{d.nombre_cliente}} {{d.ape_pat_cliente}} {{d.ape_mat_cliente}}
+<div ng-show="clientename">
+Cliente Seleccionado: {{clientedata.nombre_cliente}} {{clientedata.ape_pat_cliente}} {{clientedata.ape_mat_cliente}}
 </div>
+
 </section>
 
+<section name="generateBoleta" ng-controller="BoletasController">
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<button ng-click="createBoleta()">Realizar compra</button>
+	
+
+</section>
 <!-- Esto debe cambiarse por una llamada a un layout -->

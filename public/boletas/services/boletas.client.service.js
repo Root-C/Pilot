@@ -11,4 +11,7 @@ angular.module('boletas').factory('Boletas', ['$resource', function($resource) {
             method: 'PUT'
         }
     });
+
+	
+
 }]);

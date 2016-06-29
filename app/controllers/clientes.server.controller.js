@@ -61,12 +61,13 @@ exports.list = function(req, res) {
 // Crear un nuevo controller middleware que recupera un único cliente existente
 exports.clienteByID = function(req, res, next, id) {
 	// Usar el método model 'findById' para encontrar un único cliente 
-	Cliente.findById(id).populate('creador', 'firstName lastName fullName').exec(function(err, cliente) {
+	Cliente.findById(id).populate('distrito', 'distrito').exec(function(err, cliente) {
 		if (err) return next(err);
 		if (!cliente) return next(new Error('Fallo al cargar el cliente ' + id));
 
 		// Si un cliente es encontrado usar el objeto 'request' para pasarlo al siguietne middleware
 		req.cliente = cliente;
+		
 
 		// Llamar al siguiente middleware
 		next();
@@ -148,19 +149,6 @@ exports.clienteByLastName = function(req, res, next,apellido) {
 exports.listapellido = function(req, res) {
 	res.json(req.cliente);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

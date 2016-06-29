@@ -3,12 +3,20 @@
 
 // Crear el controller 'clientes' --> Que llama a los servicios Clientes
 angular.module('clientes').controller('ClientesController', 
-    ['$scope', '$routeParams', '$location', 'Authentication', 'Clientes','Distritos',
-    function($scope, $routeParams, $location, Authentication, Clientes, Distritos) {
+    ['$rootScope','$scope', '$routeParams', '$location', 'Authentication', 'Clientes', 'Distritos', 'Boletas',
+    function($rootScope, $scope, $routeParams, $location, Authentication, Clientes, Distritos, Boletas) {
         // Exponer el service Authentication
         $scope.authentication = Authentication;
         $scope.tablebusqueda=false;
         $scope.clientedata=[];
+        $scope.cliente=[];
+ 
+        
+
+
+        
+
+
  // Crear un nuevo método controller para crear nuevos clientes
         $scope.createClient = function() {
 
@@ -47,21 +55,27 @@ angular.module('clientes').controller('ClientesController',
         };
 
         // Crear un nuevo método controller para recuperar un unico cliente
-        $scope.findOneClient = function() {
+        $scope.findOneClient = function(id) {
             // Usar el método 'get' de cliente para enviar una petición GET apropiada
-            $scope.clientedata = Clientes.ID.get({clienteId: $routeParams.clienteId});
-            console.log($scope.cliente);
+        $scope.clientedata = Clientes.ID.get({clienteId: id});
+           $rootScope.idcliente=id;
+           $scope.clientename=true;
+           $scope.tablebusqueda=!$scope.tablebusqueda;
+           console.log($rootScope.idcliente);
+          
+
         };
 
 
         // Capturar cliente por apellido
         $scope.GetClientbyLastName = function(ape) {
             // Usar el método 'get' de cliente para enviar una petición GET apropiada
-            $scope.cliente = Clientes.Apellido.get({apellido: ape });
+            $scope.cliente = Clientes.Apellido.get({apellido: ape },function(cliente) {
             $scope.tablebusqueda=true;
-
-            
-           
+            console.log($scope.cliente);
+            console.log('Cantidad ' + $scope.cliente.length);
+             });
+        console.log($scope.cliente.length);
         };
 
 
