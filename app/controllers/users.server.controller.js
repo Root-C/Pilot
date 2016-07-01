@@ -148,7 +148,7 @@ exports.signout = function(req, res) {
   req.logout();
 
   // Redirecciona al usuario de vuelta a la página de la aplicación principal
-  res.redirect('/');
+  res.redirect('/signin');
 };
 
 // Crear un nuevo middleware controller que es usado para autorizar operaciones de autentificación 

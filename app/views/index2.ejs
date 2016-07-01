@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!--Vendor Styles -->
+	
+	<link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css"/>
+
+	<!-- Usar la propiedad 'title' para renderizar un título de página  -->
+	<title><%= title %></title>
+</head>
+<body>
+<div ng-include="'/layouts/navheader.html'"></div>
+
+
+
+
+
+	<section ng-view></section>
+	
+
+	<script type="text/javascript">
+    window.user = <%- user || 'null' %>;
+    </script>
+    
+
+
+
+
+
+
+
+
+
+
+<!-- Vendor Scripts -->
+	<script type="text/javascript" src="/lib/jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+<!-- Application Scripts -->
+	<script type="text/javascript" src="/lib/angular/angular.js"></script>
+	<script type="text/javascript" src="/lib/angular-route/angular-route.js"></script>
+	<script type="text/javascript" src="/lib/angular-resource/angular-resource.js"></script>
+
+
+	<script type="text/javascript" src="/articles/articles.client.module.js"></script>
+    <script type="text/javascript" src="/articles/controllers/articles.client.controller.js"></script>
+    <script type="text/javascript" src="/articles/services/articles.client.service.js"></script>
+    <script type="text/javascript" src="/articles/config/articles.client.routes.js"></script>
+
+    <script type="text/javascript" src="/distritos/distritos.client.module.js"></script>
+    <script type="text/javascript" src="/distritos/services/distritos.client.service.js"></script>
+
+    <script type="text/javascript" src="/clientes/clientes.client.module.js"></script>
+    <script type="text/javascript" src="/clientes/controllers/clientes.client.controller.js"></script>
+    <script type="text/javascript" src="/clientes/services/clientes.client.service.js"></script>
+    <script type="text/javascript" src="/clientes/config/clientes.client.routes.js"></script>
+
+
+	<script type="text/javascript" src="/example/example.client.module.js"></script>
+	<script type="text/javascript" src="/example/controllers/example.client.controller.js"></script>
+	<script type="text/javascript" src="/example/config/example.client.routes.js"></script>
+
+	<script type="text/javascript" src="/boletas/boletas.client.module.js"></script>
+    <script type="text/javascript" src="/boletas/controllers/boletas.client.controller.js"></script>
+    <script type="text/javascript" src="/boletas/services/boletas.client.service.js"></script>
+
+    <script type="text/javascript" src="/detalles/detalles.client.module.js"></script>
+    <script type="text/javascript" src="/detalles/controllers/detalles.client.controller.js"></script>
+    <script type="text/javascript" src="/detalles/services/detalles.client.service.js"></script>
+   
+
+	<script type="text/javascript" src="/users/users.client.module.js"></script>
+    <script type="text/javascript" src="/users/services/authentication.client.service.js"></script>
+	<script type="text/javascript" src="/application.js"></script>
+
+</body>
+</html>

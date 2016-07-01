@@ -12,7 +12,6 @@ angular.module('clientes').controller('ClientesController',
         $rootScope.buscarcliente=true;
  
         
-   
 
 
  // Crear un nuevo método controller para crear nuevos clientes
@@ -33,6 +32,7 @@ angular.module('clientes').controller('ClientesController',
 
             // Usar el método '$save' de cliente para enviar una petición POST apropiada
             cliente.$save(function(response) {
+                $('#registrarcliente').modal('toggle');
                 // Si un cliente fue creado de modo correcto, redireccionar al usuario a la página del cliente 
                 //$location.path('clientes/' + response._id);
                 

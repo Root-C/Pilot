@@ -3,8 +3,8 @@
 
 // Crear el controller 'articles' --> Que llama a los servicios Articles
 angular.module('detalles').controller('DetallesController', 
-    ['$scope', '$rootScope', '$routeParams', '$location', 'Authentication', 'Detalles',
-    function($scope, $rootScope, $routeParams, $location, Authentication, Detalles) {
+    ['$http','$scope', '$rootScope', '$routeParams', '$location', 'Authentication', 'Detalles',
+    function($http, $scope, $rootScope, $routeParams, $location, Authentication, Detalles) {
         // Exponer el service Authentication
         $scope.authentication = Authentication;
         $scope.detalles=[];
@@ -78,6 +78,20 @@ angular.module('detalles').controller('DetallesController',
                     
         }
 
+
+        $scope.deleteDetalle = function(id) {
+            $http.delete('/api/detalles/' + id)
+            .success(function(data) {
+                $scope.detalles = data;
+                console.log(data);
+            })
+            .error(function(data) {
+                console.log('Error' + data);
+            });
+        }
+
+
+
         // Crear un nuevo método controller para recuperar un unico artículo
 
 
@@ -107,22 +121,22 @@ angular.module('detalles').controller('DetallesController',
 
 
 // Crear un nuevo método controller para borrar un único artículo
-   /*     $scope.deleteArticle = function(article) {
+       /* $scope.deleteDetalle = function(detalle) {
             // Si un artículo fue enviado al método, borrarlo
-            if (article) {
+            if (detalle) {
                 // Usar el método '$remove' del artículo para borrar el artículo
-                article.$remove(function() {
+                detalle.$remove(function() {
                     // Eliminar el artículo de la lista de artículos
-                    for (var i in $scope.articles) {
-                        if ($scope.articles[i] === article) {
-                            $scope.articles.splice(i, 1);
+                    for (var i in $scope.detalles) {
+                        if ($scope.detalles[i] === detalle) {
+                            $scope.detalles.splice(i, 1);
                         }
                     }
                 });
             } else {
-                // En otro caso, usar el método '$remove' de article para borrar el article
-                $scope.article.$remove(function() {
-                    $location.path('articles');
+                // En otro caso, usar el método '$remove' de detalle para borrar el detalle
+                $scope.detalle.$remove(function() {
+                    alert("eliminado");
                 });
             }
         };*/

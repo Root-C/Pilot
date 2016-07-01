@@ -1,8 +1,31 @@
 <section ng-controller="ClientesController" >
-			<form ng-submit="GetClientbyLastName(ape)" ng-show="buscarcliente">
-			<input type="text" ng-model="ape" required/>
-			<input type="submit" class="btn btn-danger" value="enviar"/>
-			</form>
+
+
+
+<form ng-submit="GetClientbyLastName(ape)" ng-show="buscarcliente">
+
+<div class="row">
+	<div class="form-group">
+  		<div class="col-md-12">
+   			 <div class="input-group">
+       		 <input type="text" class="form-control" placeholder="Buscar cliente" aria-describedby="basic-addon2" ng-model="ape" required>
+
+     		 <div class="input-group-btn">
+      			  <button type="button" ng-click="GetClientbyLastName(ape)" class="btn btn-default">
+      	 		   Buscar
+      		  </button>
+ 
+     		</div>
+     		</div> 
+     		</div>
+    </div>
+  </div>
+
+</form>
+
+
+
+
 
 <table class="table table-stripped table-responsive" ng-show="tablebusqueda">
 		<thead>
@@ -30,11 +53,10 @@
 <div ng-show="clientename">
 Cliente Seleccionado: {{clientedata.nombre_cliente}} {{clientedata.ape_pat_cliente}} {{clientedata.ape_mat_cliente}}
 </div>
+</section>
 
 
-<div ng-include="'../boletas/views/generarboleta.html'"></div>
 
 
 
-<div ng-include="'../detalles/views/creardetalles.html'"></div>
 <!-- Esto debe cambiarse por una llamada a un layout -->

@@ -1,75 +1,98 @@
 <!-- Crear la View Articles -->
 <section ng-controller="ClientesController" ng-init="findClient()">
-	<h1>Nuevo Cliente</h1>
 	<!-- El formulario nuevo artículo -->
 	<form ng-submit="createClient()" novalidate>
-		<div>
-			<label for="nombre_cliente">Nomre</label>
-			<div>
-				<input type="text" ng-model="nombre_cliente" id="nombre_cliente" placeholder="Ingrese nombre" required>
-			</div>
-		</div>
-		<div>
-			<label for="ape_pat_cliente">Apellido Paterno</label>
-			<div>
-				<input type="text" ng-model="ape_pat_cliente" id="ape_pat_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
-			</div>
-		</div>
 
-		<div>
-			<label for="ape_mat_cliente">Apellido Materno</label>
-			<div>
-				<input type="text" ng-model="ape_mat_cliente" id="ape_mat_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
-			</div>
-		</div>
-
-		<div>
-			<label for="dni_cliente">DNI</label>
-			<div>
-				<input type="text" ng-model="dni_cliente" id="dni_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
-			</div>
-		</div>
-
-		<div>
-			<label for="direccion_cliente">Direccion</label>
-			<div>
-				<input type="text" ng-model="direccion_cliente" id="direccion_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
-			</div>
-		</div>
-
-		<div>
-			<label for="celular_cliente">Celular</label>
-			<div>
-				<input type="text" ng-model="celular_cliente" id="celular_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
-			</div>
+<div class="form-horizontal">
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="">Nombre</label>
+              	<div class="col-md-4">
+                     <input type="text" ng-model="nombre_cliente" id="nombre_cliente" placeholder="Ingrese nombre"  class="form-control input-sm" required>
+                </div>
 		</div>
 
 
-		<div>
-			<label for="fijo_cliente">Telf Fijo</label>
-			<div>
-				<input type="text" ng-model="fijo_cliente" id="fijo_cliente" cols="30" rows="10" placeholder="Ingrese..."/>
-			</div>
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="">Apellido Paterno</label>
+              	<div class="col-md-4">
+                     <input type="text" ng-model="ape_pat_cliente" id="ape_pat_cliente" cols="30" rows="10" placeholder="Ingrese..." class="form-control input-sm" required/>
+                </div>
 		</div>
 
-		<div>
-			<label for="distrito">Distrito</label>
-			<div>
-				<select ng-model="distrito">
-					<option ng-selected="distrito == item._id" ng-repeat="item in distritos" ng-value="item._id">{{item.distrito}}</option>
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="">Apellido Materno</label>
+              	<div class="col-md-4">
+                    <input type="text" ng-model="ape_mat_cliente" id="ape_mat_cliente" cols="30" rows="10" placeholder="Ingrese..." class="form-control input-sm" required/>
+                </div>
+		</div>
+
+
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="">DNI</label>
+              	<div class="col-md-4">
+                    	<input type="text" ng-model="dni_cliente" id="dni_cliente" cols="30" rows="10" placeholder="Ingrese..." class="form-control input-sm" required/>
+                </div>
+		</div>
+	
+
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="">Direccion</label>
+              	<div class="col-md-4">
+                   <input type="text" ng-model="direccion_cliente" id="direccion_cliente" cols="30" rows="10" placeholder="Ingrese..." class="form-control input-sm" required/>
+                </div>
+		</div>
+
+
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="">Direccion</label>
+              	<div class="col-md-4">
+                   <input type="text" ng-model="direccion_cliente" id="direccion_cliente" cols="30" rows="10" placeholder="Ingrese..." class="form-control input-sm" required/>
+                </div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="">Celular</label>
+              	<div class="col-md-4">
+                   <input type="text" ng-model="celular_cliente" id="celular_cliente" cols="30" rows="10" placeholder="Ingrese..." class="form-control input-sm" required/>
+                </div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="">Telf Fijo</label>
+              	<div class="col-md-4">
+                  <input type="text" ng-model="fijo_cliente" id="fijo_cliente" cols="30" rows="10" placeholder="Ingrese..." class="form-control input-sm" required/>
+                </div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="">Distrito</label>
+              	<div class="col-md-4">
+                  <select ng-model="distrito">
+					<option ng-selected="distrito == item._id" ng-repeat="item in distritos" ng-value="item._id" class="form-control input-sm" required>{{item.distrito}}</option>
 				</select>
-
-			</div>
+                </div>
 		</div>
 
 
-
-		<div>
-			<input type="submit">
+		<div class="form-group">
+			<label class="col-md-4 control-label" for=""></label>
+			<div class="row">
+              	<div class="col-md-4">
+                  <input type="submit" class="btn btn-success" value="Registrar">
+                  <button  class="btn btn-warning" data-dismiss="modal">Cancelar</button>
+                </div>
+                </div>
 		</div>
+	
+
+			
+		
 		<!-- El elemento mensaje de error -->
 		<div ng-show="error">
 			<strong ng-bind="error"></strong>
+			<a href="/signin">Iniciar Sesion</a>
+		</div>
+
 		</div>
 	</form>
 </section>

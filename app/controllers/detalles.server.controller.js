@@ -42,7 +42,7 @@ exports.create = function(req, res) {
 // Crear un nuevo método controller que recupera una lista de artículos
 exports.list = function(req, res) {
 	// Usar el método model 'find' para obtener una lista de artículos
-	Detalle.find().sort('-creado').populate('creador', 'firstName lastName fullName').exec(function(err, detalles) {
+	Detalle.find().sort('-idboleta').exec(function(err, detalles) {
 		if (err) {
 			// Si un error ocurre enviar un mensaje de error
 			return res.status(400).send({
@@ -59,7 +59,7 @@ exports.list = function(req, res) {
 // Crear un nuevo controller middleware que recupera un único artículo existente PARAMETRIZA A LOS DEMAS
 exports.detalleByID = function(req, res, next, id) {
 	// Usar el método model 'findById' para encontrar un único artículo 
-	Detalle.findById(id).populate('creador', 'firstName lastName fullName').exec(function(err, detalle) {
+	Detalle.findById(id).exec(function(err, detalle) {
 		if (err) return next(err);
 		if (!detalle) return next(new Error('Fallo al cargar el artículo ' + id));
 
@@ -97,6 +97,10 @@ exports.update = function(req, res) {
 		} else {
 			// Enviar una representación JSON del artículo 
 			res.json(detalle);
+
+
+
+
 		}
 	});
 };
@@ -107,6 +111,7 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
 	// Obtener el artículo usando el objeto 'request'
 	var detalle = req.detalle;
+	var boleta= req.detalle.idboleta;
 
 	// Usar el método model 'remove' para borrar el artículo
 	detalle.remove(function(err) {
@@ -117,7 +122,16 @@ exports.delete = function(req, res) {
 			});
 		} else {
 			// Enviar una representación JSON del artículo 
-			res.json(detalle);
+			//res.json(detalle);
+
+			// Usar el método model 'find' para obtener una lista de artículos
+	
+
+	Detalle.find({idboleta:boleta},function(err, detalles) {		
+        res.status(200).send(detalles);
+		});
+
+
 		}
 	});
 };
@@ -132,6 +146,7 @@ exports.detallesForNum = function(req, res, next, idboleta) {
 			
 			console.log(err);
 		}
+		req.idboleta= 1;
 		req.detalle = detalles;
 
 		// Llamar al siguiente middleware

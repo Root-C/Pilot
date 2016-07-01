@@ -1,0 +1,31 @@
+  <!-- Modal -->
+        <div id="registrarventa" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Registrar Venta</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <!-- Formulario de busqueda de cliente -->
+                        <div ng-include="'../clientes/views/search-cliente.client.view.html'"></div>
+
+                        <!-- Formulario para generar una nueva boleta -->
+                        <div ng-include="'../boletas/views/generarboleta.html'"></div>
+
+                        <!-- Formulario para generar un detalle -->
+                        <div ng-include="'../detalles/views/creardetalles.html'"></div>     
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
