@@ -1,0 +1,108 @@
+<section name="creardetalles" ng-controller="DetallesController">
+
+<div class="row" ng-show="creardetalles">
+
+
+
+<div class="form-horizontal">
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for=""> Codigo de producto</label>
+                   <div class="col-md-4">
+                     <input id="idproducto" name="" type="text" placeholder="Ingrese ID..." class="form-control input-md" ng-model="idproducto" required="">
+                     </div>
+			</div>
+
+			<div class="form-group">
+			<label class="col-md-4 control-label" for=""> Descripcion</label>
+				<div class="col-md-4">
+					<input type="text" ng-model="descripcionproducto" placeholder="descrip" class="form-control input-md"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+			<label class="col-md-4 control-label" for=""> Precio</label>
+				<div class="col-md-4">
+					<input type="text" ng-model="precioproducto" placeholder="Precio" class="form-control input-md"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+			<label class="col-md-4 control-label" for=""> Cantidad</label>
+				<div class="col-md-4">
+					<input type="text" ng-model="cantidadproducto" placeholder="Cantidad" class="form-control input-sm"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+			<label class="col-md-4 control-label" for=""> Descuento</label>
+				<div class="col-md-4">
+					<input type="text" ng-model="descuentoproducto" placeholder="Descuento" class="form-control input-md"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+			<label class="col-md-4 control-label" for=""> </label>
+				<div class="col-md-4">
+					<button class="btn btn-success" ng-click="createDetalle()">Añadir items</button>
+				</div>
+			</div>
+	</div>
+
+<div class="col-md-10">
+			<table class="table table-stripped table-responsive">
+				<thead>
+					<tr>
+						<th>IdProducto</th>
+						<th>Descripcion</th>
+						<th>Precio Regular</th>
+						<th>Cantidad</th>
+						<th>Descuento</th>
+						<th>Precio Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="d in detalles">
+						<td>{{d.idproducto}}</td>
+						<td>{{d.descripcionproducto}}</td>
+						<td>S/. {{d.precioproducto}}</td>
+						<td>{{d.cantidadproducto}}</td>
+						<td>S/. {{d.descuentoproducto}}</td>
+						<td>S/. {{d.preciofinal}}</td>
+					</tr>
+					<tr>
+						<td colspan="3">Precio Regular : </td>
+						<td> </td>
+						<td></td>
+						<td>S/. {{getParcial()}}</td> 
+						<td><i class="icon-ok"></i></td>
+					</tr>	
+					<tr>
+						<td colspan="3">Total Descuentos : </td>
+						<td> </td>
+						<td></td>
+						<td >S/. {{getDescuentos()}}</td> 
+						<td><i class="icon-ok"></i></td>
+					</tr>
+					<tr>
+						<td colspan="3">Precio Total : </td>
+						<td> </td>
+						<td></td>
+						<td>S/. {{getTotal()}}</td>
+						<td><i class="icon-ok"></i></td>
+					</tr>
+					<tr ng-include="'../boletas/views/pagarboletas.html'">
+						
+					</tr>
+
+				</tbody>
+			</table>
+			</div>
+</div>
+
+
+
+
+
+
+</section>

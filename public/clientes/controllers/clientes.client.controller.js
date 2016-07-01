@@ -9,12 +9,10 @@ angular.module('clientes').controller('ClientesController',
         $scope.authentication = Authentication;
         $scope.tablebusqueda=false;
         $scope.clientedata=[];
-        $scope.cliente=[];
+        $rootScope.buscarcliente=true;
  
         
-
-
-        
+   
 
 
  // Crear un nuevo método controller para crear nuevos clientes
@@ -59,10 +57,10 @@ angular.module('clientes').controller('ClientesController',
             // Usar el método 'get' de cliente para enviar una petición GET apropiada
         $scope.clientedata = Clientes.ID.get({clienteId: id});
            $rootScope.idcliente=id;
+           $rootScope.boletagenerate=true;
            $scope.clientename=true;
            $scope.tablebusqueda=!$scope.tablebusqueda;
-           console.log($rootScope.idcliente);
-          
+
 
         };
 
@@ -72,10 +70,10 @@ angular.module('clientes').controller('ClientesController',
             // Usar el método 'get' de cliente para enviar una petición GET apropiada
             $scope.cliente = Clientes.Apellido.get({apellido: ape },function(cliente) {
             $scope.tablebusqueda=true;
-            console.log($scope.cliente);
-            console.log('Cantidad ' + $scope.cliente.length);
+            //console.log($scope.cliente);
+            //console.log('Cantidad ' + $scope.cliente.length);
              });
-        console.log($scope.cliente.length);
+  
         };
 
 

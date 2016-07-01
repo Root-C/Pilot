@@ -1,5 +1,5 @@
-<section ng-controller="ClientesController">
-			<form ng-submit="GetClientbyLastName(ape)">
+<section ng-controller="ClientesController" >
+			<form ng-submit="GetClientbyLastName(ape)" ng-show="buscarcliente">
 			<input type="text" ng-model="ape" required/>
 			<input type="submit" class="btn btn-danger" value="enviar"/>
 			</form>
@@ -31,17 +31,10 @@
 Cliente Seleccionado: {{clientedata.nombre_cliente}} {{clientedata.ape_pat_cliente}} {{clientedata.ape_mat_cliente}}
 </div>
 
-</section>
 
-<section name="generateBoleta" ng-controller="BoletasController">
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<button ng-click="createBoleta()">Realizar compra</button>
-	
+<div ng-include="'../boletas/views/generarboleta.html'"></div>
 
-</section>
+
+
+<div ng-include="'../detalles/views/creardetalles.html'"></div>
 <!-- Esto debe cambiarse por una llamada a un layout -->
