@@ -11,8 +11,7 @@ angular.module('clientes').controller('ClientesController',
         $scope.clientedata=[];
         $rootScope.buscarcliente=true;
  
-        
-
+ 
 
  // Crear un nuevo método controller para crear nuevos clientes
         $scope.createClient = function() {

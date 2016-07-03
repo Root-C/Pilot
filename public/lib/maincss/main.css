@@ -1,0 +1,36 @@
+.imagenproducto{
+	width: 250px !important;
+	height: 160px !important;
+}
+
+
+.descuento{
+	color:red;
+	text-decoration:line-through;
+	text-align:center;
+}
+
+.negrita{
+	font-weight:bold;	
+}
+
+.preciofinal{
+	color:green;
+	font-size:14px;
+	text-align:center;
+	
+}
+
+.verde{
+	color:green;
+	
+}
+
+
+table th td{
+	text-align: center;	
+}
+
+.centrar{
+	text-align:center;	
+}

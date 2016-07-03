@@ -26,6 +26,7 @@ angular.module('detalles').controller('DetallesController',
             detalle.$save(function(response) {
 
                $scope.detalles = Detalles.ForNum.get({idboleta: $rootScope.idboleta });
+               $scope.tabledetalles=true;
 
                 // Si un artículo fue creado de modo correcto, redireccionar al usuario a la página del artículo 
                 console.log(response.idboleta);
@@ -68,13 +69,13 @@ angular.module('detalles').controller('DetallesController',
         };
 
 
-        $scope.getTotal=function(){
-            $rootScope.total=0;
+        $scope.getFacturado=function(){
+            $rootScope.facturado=0;
             for(var i = 0; i < $scope.detalles.length; i++){
             var detalle = $scope.detalles[i];
-            $rootScope.total += (detalle.preciofinal);
+            $rootScope.facturado += (detalle.preciofinal);
             }
-            return $rootScope.total;
+            return $rootScope.facturado;
                     
         }
 

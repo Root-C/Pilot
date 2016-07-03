@@ -17,7 +17,12 @@ module.exports = function(app) {
 	   .put(boletas.update)
 	   .delete(boletas.delete);
 
-	// Configurar el parámetro middleware 'articleId'   
+	app.route('/api/boleta/:ClienteID')
+	   .get(boletas.boletaByClient);
+
+	// Configurar el parámetro middleware 'articleId'  
 	app.param('boletaId', boletas.boletaByID);
+	app.param('ClienteID', boletas.boletaByClientID); 
+
 };
 

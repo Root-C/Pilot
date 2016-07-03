@@ -1,7 +1,5 @@
-<td colspan="3">Cantidad a pagar : </td>
-						<td></td>
-						<td></td>
-						<td ng-controller="BoletasController">
-						<input type="text" class="form-control input-sm" ng-model="monto_pagado" placeholder="S/. {{total/2}}" size="3">
-						<button ng-click="actualizar(_id)">Actualizar</button></td>
-						<td><i class="icon-ok"></i></td>
+<td colspan="5" class="negrita">Cantidad a pagar : </td>
+						<td class="centrar">
+						<label>S/.{{facturado/2}}</label>
+						</td>
+						<td class="centrar"><button ng-click="actualizar(_id)" class="btn btn-success btn-sm">Pagar</button></td>

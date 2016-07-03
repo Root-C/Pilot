@@ -47,51 +47,45 @@
 			</div>
 	</div>
 
-<div class="col-md-12">
-			<table class="table table-stripped table-responsive">
+<div class="col-md-12" ng-show="tabledetalles">
+			<table class="table table-striped table-responsive table-bordered">
 				<thead>
 					<tr>
-						<th>IdProducto</th>
-						<th>Descripcion</th>
-						<th>Precio Regular</th>
-						<th>Cantidad</th>
-						<th>Descuento</th>
-						<th>Precio Total</th>
-						<th></th>
+						<th class="centrar">IdProducto</th>
+						<th class="centrar">Descripcion</th>
+						<th class="centrar">Precio Regular</th>
+						<th class="centrar">Cantidad</th>
+						<th class="centrar">Descuento</th>
+						<th class="centrar">Precio Total</th>
+						<th class="centrar">Acciones</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="d in detalles">
-						<td>{{d.idproducto}}</td>
-						<td>{{d.descripcionproducto}}</td>
-						<td>S/. {{d.precioproducto}}</td>
-						<td>{{d.cantidadproducto}}</td>
-						<td>S/. {{d.descuentoproducto}}</td>
-						<td>S/. {{d.preciofinal}}</td>
-						<td><a ng-click="deleteDetalle(d._id)">Eliminar</a></td>
+						<td class="centrar">{{d.idproducto}}</td>
+						<td class="centrar">{{d.descripcionproducto}}</td>
+						<td class="centrar">S/. {{d.precioproducto}}</td>
+						<td class="centrar">{{d.cantidadproducto}}</td>
+						<td class="centrar">S/. {{d.descuentoproducto}}</td>
+						<td class="centrar">S/. {{d.preciofinal}}</td>
+						<td class="centrar"><a ng-click="deleteDetalle(d._id)"><i class="icon-remove"></i></a></td>
 					</tr>
 					<tr>
-						<td colspan="3">Precio Regular : </td>
-						<td> </td>
-						<td></td>
-						<td>S/. {{getParcial()}}</td> 
-						<td><i class="icon-ok"></i></td>
+						<td colspan="5" class="negrita">Precio Regular : </td>
+						<td class="descuento">S/. {{getParcial()}}</td> 
+						<td class="centrar"><i class="icon-ok"></i></td>
 					</tr>	
 					<tr>
-						<td colspan="3">Total Descuentos : </td>
-						<td> </td>
-						<td></td>
-						<td >S/. {{getDescuentos()}}</td> 
-						<td><i class="icon-ok"></i></td>
+						<td colspan="5" class="negrita">Total Descuentos : </td>
+						<td class="centrar">S/. {{getDescuentos()}}</td> 
+						<td class="centrar"><i class="icon-ok"></i></td>
 					</tr>
 					<tr>
-						<td colspan="3">Precio Total : </td>
-						<td> </td>
-						<td></td>
-						<td>S/. {{getTotal()}}</td>
-						<td><i class="icon-ok"></i></td>
+						<td colspan="5" class="negrita">Precio Total : </td>
+						<td class="preciofinal">S/. {{getFacturado()}}</td>
+						<td class="centrar"><i class="icon-ok"></i></td>
 					</tr>
-					<tr ng-include="'../boletas/views/pagarboletas.html'">
+					<tr  class="success" ng-include="'../boletas/views/pagarboletas.html'" ng-controller="BoletasController" >
 						
 					</tr>
 

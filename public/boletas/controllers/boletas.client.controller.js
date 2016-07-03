@@ -81,10 +81,10 @@ angular.module('boletas').controller('BoletasController',
 
 
         $scope.actualizar=function(id){
-            $scope.boleta={"monto_pagado":this.monto_pagado,
+            $scope.boleta={"monto_pagado":$rootScope.facturado/2,
                             "monto_total":$rootScope.total,
                             "monto_descontado":$rootScope.desc,
-                            "monto_facturado":$rootScope.parcial
+                            "monto_facturado":$rootScope.facturado
                             };
        
             $http.put('/api/boletas/'+id,$scope.boleta)

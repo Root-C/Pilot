@@ -3,7 +3,8 @@
 
 // Cargar las dependencias del módulo
 var mongoose = require('mongoose'),
-	Boleta = mongoose.model('Boleta');
+	Boleta = mongoose.model('Boleta'),
+	Cliente= mongoose.model('Cliente');
 
 var boletascant=0;
 
@@ -24,11 +25,13 @@ exports.create = function(req, res) {
 	Boleta.find().count(function(err, count) {
 	boletascant= count+1;
 	
+	
 	// Crear un nuevo objeto artículo
 	var boleta = new Boleta(req.body);
 
 	// Configurar la propiedad 'creador' del artículo
 	boleta.idboleta= boletascant;
+	boleta.idusuario="Admin";
 
 
 	// Intentar salvar el artículo
@@ -81,6 +84,26 @@ exports.boletaByID = function(req, res, next, id) {
 	});
 };
 
+exports.boletaByClientID = function(req,res,next,id){
+	
+	Boleta.find({'idcliente' : id}).populate('idcliente', 'nombre_cliente').exec(function(err, boletas) {
+		if (err) return next(err);
+		if (!boletas) return next(new Error('Fallo al cargar la boleta ' + id));
+
+		// Si un artículo es encontrado usar el objeto 'request' para pasarlo al siguietne middleware
+		req.boletabyclient = boletas;
+
+		// Llamar al siguiente middleware
+		next();
+	});
+
+
+
+};
+
+exports.boletaByClient = function(req, res) {
+	res.json(req.boletabyclient);
+};
 
 
 // Crear un nuevo método controller que devuelve un artículo existente
