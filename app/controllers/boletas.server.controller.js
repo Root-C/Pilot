@@ -55,7 +55,7 @@ exports.create = function(req, res) {
 // Crear un nuevo método controller que recupera una lista de artículos
 exports.list = function(req, res) {
 	// Usar el método model 'find' para obtener una lista de artículos
-	Boleta.find().sort('-idboleta').populate('idcliente', 'nombre_cliente').exec(function(err, boletas) {
+	Boleta.find().sort('-idboleta').populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
 		if (err) {
 			// Si un error ocurre enviar un mensaje de error
 			return res.status(400).send({
@@ -86,7 +86,7 @@ exports.boletaByID = function(req, res, next, id) {
 
 exports.boletaByClientID = function(req,res,next,id){
 	
-	Boleta.find({'idcliente' : id}).populate('idcliente', 'nombre_cliente').exec(function(err, boletas) {
+	Boleta.find({'idcliente' : id}).populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
 		if (err) return next(err);
 		if (!boletas) return next(new Error('Fallo al cargar la boleta ' + id));
 
@@ -117,11 +117,25 @@ exports.update = function(req, res) {
 	var boleta = req.boleta;
 
 	// Actualizar los campos artículo
-
+	if(req.body.monto_total){
 	boleta.monto_total = req.body.monto_total;
+	}
+	
+
+	if(req.body.monto_descontado){
 	boleta.monto_descontado = req.body.monto_descontado;
+	}
+	
+
+	if(req.body.monto_facturado){
 	boleta.monto_facturado = req.body.monto_facturado;
-	boleta.monto_pagado= req.body.monto_pagado;
+	}
+	
+
+	if(req.body.monto_pagado){
+	boleta.monto_pagado= (parseFloat(boleta.monto_pagado) + parseFloat(req.body.monto_pagado));
+	}
+	
 
 
 	// Intentar salvar el artículo actualizado

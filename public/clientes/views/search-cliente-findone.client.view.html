@@ -1,0 +1,28 @@
+<table class="table table-stripped table-responsive" ng-show="showtablebusqueda">
+		<thead>
+				<tr>
+					<th>Nombres</th>
+					<th>Dni</th>
+					<th>Direccion</th>
+					<th>Telefono</th>
+					<th>Celular</th>
+					<th>Acciones</th>
+				</tr>
+		</thead>
+		<tbody>
+				<tr ng-repeat="item in cliente">
+					<td>{{item.nombre_cliente}} {{item.ape_pat_cliente}} {{item.ape_mat_cliente}}</td>
+					<td>{{item.dni_cliente}}</td>
+					<td>{{item.direccion_cliente}}</td>
+					<td>{{item.fijo_cliente}}</td>
+					<td>{{item.celular_cliente}}</td>
+					<td><button class="btn btn-success" ng-click="findOneClient(item._id)">Seleccionar</button></td>
+				</tr>
+		</tbody>
+</table>
+
+<div ng-show="showclientname">
+<label class="negrita">Cliente Seleccionado: {{clientedata.nombre_cliente}} {{clientedata.ape_pat_cliente}} {{clientedata.ape_mat_cliente}}</label>
+<br/>
+<br/>
+</div>

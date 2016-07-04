@@ -3,13 +3,13 @@
 
 // Crear el controller 'clientes' --> Que llama a los servicios Clientes
 angular.module('clientes').controller('ClientesController', 
-    ['$rootScope','$scope', '$routeParams', '$location', 'Authentication', 'Clientes', 'Distritos', 'Boletas',
-    function($rootScope, $scope, $routeParams, $location, Authentication, Clientes, Distritos, Boletas) {
+    ['$http','$rootScope','$scope', '$routeParams', '$location', 'Authentication', 'Clientes', 'Distritos', 'Boletas',
+    function($http,$rootScope, $scope, $routeParams, $location, Authentication, Clientes, Distritos, Boletas) {
         // Exponer el service Authentication
         $scope.authentication = Authentication;
-        $scope.tablebusqueda=false;
+        $rootScope.showtablebusqueda=false;
         $scope.clientedata=[];
-        $rootScope.buscarcliente=true;
+        $rootScope.showbuscarcliente=true;
  
  
 
@@ -57,8 +57,8 @@ angular.module('clientes').controller('ClientesController',
         $scope.clientedata = Clientes.ID.get({clienteId: id});
            $rootScope.idcliente=id;
            $rootScope.boletagenerate=true;
-           $scope.clientename=true;
-           $scope.tablebusqueda=!$scope.tablebusqueda;
+           $rootScope.showclientname=true;
+           $rootScope.showtablebusqueda=!$scope.showtablebusqueda;
 
 
         };
@@ -68,12 +68,55 @@ angular.module('clientes').controller('ClientesController',
         $scope.GetClientbyLastName = function(ape) {
             // Usar el método 'get' de cliente para enviar una petición GET apropiada
             $scope.cliente = Clientes.Apellido.get({apellido: ape },function(cliente) {
-            $scope.tablebusqueda=true;
+            $rootScope.showtablebusqueda=true;
+            console.log($scope.cliente);
             //console.log($scope.cliente);
             //console.log('Cantidad ' + $scope.cliente.length);
              });
   
         };
+
+
+
+        $scope.getBoletasByClientId=function(id){
+            $http.get('/api/boleta/' + id)
+            .success(function(data) {
+                $scope.boletapayments=true;
+               $scope.boletasxcliente=data;
+            })
+            .error(function(data) {
+                console.log('Error' + data);
+            });
+
+
+
+        };
+
+
+
+            $scope.actualizarPago=function(id){
+            
+
+            $scope.boleta={"monto_pagado":this.montoapagar};
+            
+            $http.put('/api/boletas/'+id,$scope.boleta)
+            .success(function(data) {
+                var diferencia= (parseFloat(data.monto_facturado) - parseFloat(data.monto_pagado));
+                
+
+               alertify.alert('Cuota pagada correctamente, deuda actual: '+diferencia,function(){
+                $('#gestionarpagos').modal('toggle');
+                alertify.log("Has pagado una cuota satisfactoriamente");
+               });
+                $scope.cliente=[];
+                $scope.boletapayments=false;
+    
+            })
+            .error(function(data) {
+                console.log('Error' + data);
+            });
+                    
+            };
 
 
  // Crear un nuevo método controller para actualizar un único cliente

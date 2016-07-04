@@ -28,7 +28,7 @@ angular.module('boletas').controller('BoletasController',
                 console.log("el id del cliente es: " + $rootScope.idcliente);
                  $rootScope.idboleta = response.idboleta;
                  $rootScope._id=response._id;
-                 $rootScope.creardetalles=true;
+                 $rootScope.showcreardetalles=true;
                  $rootScope.boletagenerate=false;
                  $rootScope.buscarcliente=false;
                 console.log("el numero de boleta root es: "+ $rootScope.idboleta);
@@ -90,14 +90,18 @@ angular.module('boletas').controller('BoletasController',
             $http.put('/api/boletas/'+id,$scope.boleta)
             .success(function(data) {
                 $scope.boleta = {};
-                alert("actualizado conchatumadre");
+            $rootScope.showcreardetalles=false;
+            $rootScope.showclientname=false;
+            $rootScope.showtablebusqueda=false;
+            $rootScope.showbuscarcliente=true;
+
     
             })
             .error(function(data) {
                 console.log('Error' + data);
             });
                     
-            }
+            };
 
 
 
