@@ -14,8 +14,7 @@ var ClienteSchema = new Schema({
     type: String
   },
   fecha_nac_cliente: {
-    type: Date,
-    default:Date.now
+    type: Date
   },
   dni_cliente: {
     type: String

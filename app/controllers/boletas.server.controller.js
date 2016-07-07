@@ -69,10 +69,26 @@ exports.list = function(req, res) {
 };
 
 
+exports.listTopTen = function(req, res) {
+	// Usar el método model 'find' para obtener una lista de artículos
+	Boleta.find().sort('-idboleta').limit(10).populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
+		if (err) {
+			// Si un error ocurre enviar un mensaje de error
+			return res.status(400).send({
+				message: getErrorMessage(err)
+			});
+		} else {
+			// Enviar una representación JSON del artículo 
+			res.json(boletas);
+		}
+	});
+};
+
+
 // Crear un nuevo controller middleware que recupera un único artículo existente PARAMETRIZA A LOS DEMAS
 exports.boletaByID = function(req, res, next, id) {
 	// Usar el método model 'findById' para encontrar un único artículo 
-	Boleta.findById(id).populate('idcliente', 'nombre_cliente').exec(function(err, boletas) {
+	Boleta.findById(id).populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
 		if (err) return next(err);
 		if (!boletas) return next(new Error('Fallo al cargar la boleta ' + id));
 
@@ -96,8 +112,6 @@ exports.boletaByClientID = function(req,res,next,id){
 		// Llamar al siguiente middleware
 		next();
 	});
-
-
 
 };
 

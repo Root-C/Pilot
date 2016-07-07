@@ -45,8 +45,24 @@
 					<td class="centrar">S/. {{data.monto_facturado}}</td>
 					<td class="centrar">S/. {{data.monto_pagado}}</td>			
 					<td class="centrar">S/. {{data.monto_facturado - data.monto_pagado}}</td>
-					<td class="centrar"><input type="text" ng-model="montoapagar" class="form-control input-sm" placeholder="Ingrese monto a pagar"/></td>
-					<td class="centrar"><a role="button"ng-click="actualizarPago(data._id)" ><i class="icon-save icon-2"></i></a role="button"></td>
+
+
+					<td class="centrar" ng-show="(data.monto_facturado - data.monto_pagado)==0">
+					<label class="verde">Cancelado</label>
+					</td>
+
+					<td class="centrar" ng-show="(data.monto_facturado - data.monto_pagado)>0">
+					<input type="text" ng-model="montoapagar" class="form-control input-sm" placeholder="Ingrese monto a pagar"/></td>
+
+					<td class="centrar" ng-show="(data.monto_facturado - data.monto_pagado)>0">
+					<a role="button"ng-click="actualizarPago(data._id)" ><i class="icon-save icon-2"></i></a role="button">
+					</td>
+
+					<td class="centrar" ng-show="(data.monto_facturado - data.monto_pagado)==0">
+					<a><i class="icon-check icon-2"></i></a role="button">
+					</td>
+
+
 				</tr>
 		</tbody>
 </table>

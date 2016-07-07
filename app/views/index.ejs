@@ -7,6 +7,8 @@
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link rel="stylesheet" href="/lib/maincss/main.css"/>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=all" rel="stylesheet" type="text/css" />
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
     <link href="http://fabien-d.github.io/alertify.js/assets/js/lib/alertify/alertify.core.css" rel="stylesheet"/>
     <link href="http://fabien-d.github.io/alertify.js/assets/js/lib/alertify/alertify.default.css" rel="stylesheet"/>
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
@@ -117,6 +119,7 @@
                                     <li ng-show="!authentication.user">
                                         <a href="/signin">
                                             <i class="icon-key"></i> Log In </a>
+
                                     </li>
 
                                 </ul>
@@ -160,14 +163,14 @@
                     <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
                     <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-hover-submenu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
                         <li class="nav-item start active open">
-                            <a href="index.html" class="nav-link nav-toggle">
+                            <a href="/" class="nav-link nav-toggle">
                                 <i class="icon-home"></i>
                                 <span class="title">Inicio</span>
                                 
                             </a>
                         
                         </li>
-                        <li class="nav-item  ">
+                       <!-- <li class="nav-item  ">
                             <a href="javascript:;" class="nav-link nav-toggle">
                                 <i class="icon-diamond"></i>
                                 <span class="title">Mantenimiento</span>
@@ -192,7 +195,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li>-->
                         
             
                     </ul>
@@ -219,6 +222,8 @@
                                         <span data-counter="counterup" data-value="1349">0</span>
                                     </div>
                                     <div class="desc"> Registrar Cliente </div>
+
+
                                 </div>
                             </a>
                         </div>
@@ -281,54 +286,50 @@
                                 <div class="portlet-title">
                                     <div class="caption">
                                         <i class="icon-bar-chart font-dark hide"></i>
-                                        <span class="caption-subject font-dark bold uppercase">Site Visits</span>
-                                        <span class="caption-helper">weekly stats...</span>
+                                        <span class="caption-subject font-dark bold uppercase">Ultimos 10 usuarios atendidos</span>
                                     </div>
                                     <div class="actions">
                                         <div class="btn-group btn-group-devided" data-toggle="buttons">
-                                            <label class="btn red btn-outline btn-circle btn-sm active">
-                                                <input type="radio" name="options" class="toggle" id="option1">New</label>
-                                            <label class="btn red btn-outline btn-circle btn-sm">
-                                                <input type="radio" name="options" class="toggle" id="option2">Returning</label>
+                                          
+                                                <input type="text" class="form-control input-sm"/> 
+                                         
                                         </div>
                                     </div>
                                 </div>
-                                <div class="portlet-body">
-                                    <table class="table table-responsive">
+
+                                <div class="portlet-body" ng-controller="BoletasController">
+                                    <table class="table table-responsive table-striped centrar" ng-init="getTopTen()">
                                         <thead>
-                                            <tr>
-                                                <th>Idproducto</th>
-                                                <th>Nombre Producto</th>
-                                                <th>Costo</th>
+                                            <tr class="headercenter">
+                                                <th>N°</th>
+                                                <th>Nombre</th>
+                                                <th>Fecha</th>
+                                                <th>Facturado</th>
+                                                <th>Pagado</th>
+                                                <th>Pendiente</th>
+                                                <th>Acciones</th> 
+                                                
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Galleta Morochas</td>
-                                                <td>0.50</td>
+                                            <tr ng-repeat="item in topten">
+                                                <td>{{item.idboleta}}</td>
+                                                <td class="left">{{item.idcliente.nombre_cliente}} {{item.idcliente.ape_pat_cliente}}</td>
+                                                <td>{{item.fecha_trans | date :  "dd/MM/y"}}</td>
+                                                <td>S/. {{item.monto_facturado}}</td>
+                                                <td>S/. {{item.monto_pagado}}</td>
+                                                <td class="verde">S/. {{item.monto_facturado - item.monto_pagado | number:0}}</td>
+                                                <td ng-controller="DetallesController">
+                                                 <a ng-click="getDetailsForNumBoleta(item.idboleta)" role="button" data-toggle="modal" data-target="#detallesxcliente">Ver</a>
+                                                </td>
+                                               
                                             </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Arroz Costeño</td>
-                                                <td>3.50</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Yogurt Yopi - Pequeño</td>
-                                                <td>0.50</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Cheetos Picante</td>
-                                                <td>0.50</td>
-                                            </tr>
+
 
                                         </tbody>
 
 
                                     </table>
-
                                 </div>
                             </div>
                             <!-- END PORTLET-->
@@ -344,22 +345,24 @@
                                     </div>
                                 
                                 </div>
-                                <div class="portlet-body">
-                                    <table class="table table-responsive">
+                                <div class="portlet-body" ng-controller="BoletasController">
+                                    <table class="table table-responsive table-striped" ng-init="getTopTen()">
                                         <thead>
                                             <tr>
                                                 <th>Nombre Cliente</th>
                                                 <th>Fecha Transaccion</th>
-                                                <th>Cobrado</th>
+                                                <th>Facturado</th>
+                                                <th>Pagado</th>
                                                 
                                             
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Hiro Palacios</td>
-                                                <td>03/05/2016</td>
-                                                <td>S/27.50</td>
+                                            <tr ng-repeat="item in topten">
+                                                <td>{{item.idcliente.nombre_cliente}} {{item.idcliente.ape_pat_cliente}} {{item.idcliente.ape_mat_cliente}}</td>
+                                                <td>{{item.fecha_trans | date :  "dd/MM/y"}}</td>
+                                                <td>S/. {{item.monto_facturado}}</td>
+                                                <td>S/. {{item.monto_pagado}}</td>
                                             </tr>
 
 
@@ -399,6 +402,8 @@
 
         <div ng-include="'/modals/modal-payments.client.view.html'"></div>
 
+        <div ng-include="'/modals/modal-detailsperclient.client.view.html'"></div>
+
 
 
 
@@ -430,6 +435,8 @@
 <!-- BEGIN CORE PLUGINS -->
         <script src="/lib/global/plugins/jquery.min.js" type="text/javascript"></script>
         <script src="/lib/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+         <script type="text/javascript" src="/lib/jquery/dist/jquery.datepicker-language-es.js"></script>
         <script src="/lib/global/plugins/js.cookie.min.js" type="text/javascript"></script>
         <script src="/lib/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
         <script src="/lib/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>

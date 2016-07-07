@@ -78,6 +78,9 @@ exports.read = function(req, res) {
 	res.json(req.detalle);
 };
 
+
+
+
 // Crear un nuevo método controller que actualiza un artículo existente
 exports.update = function(req, res) {
 	// Obtener el artículo usando el objeto 'request'

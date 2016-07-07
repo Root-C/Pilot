@@ -31,6 +31,27 @@ table th td{
 	text-align: center;	
 }
 
-.centrar{
-	text-align:center;	
+.centrar td{
+	text-align:center;
+	font-size:12px!important;	
 }
+
+
+.headercenter th{
+	text-align:center;
+	background-color: #585858;
+	color: #FFFFFF;
+	font-size:12px!important;	
+}
+
+
+.left{
+	text-align:left;	
+}
+
+
+.detalle{
+	background-color:#FFFF66;
+	
+}
+

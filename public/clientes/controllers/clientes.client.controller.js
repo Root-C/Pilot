@@ -15,7 +15,6 @@ angular.module('clientes').controller('ClientesController',
 
  // Crear un nuevo método controller para crear nuevos clientes
         $scope.createClient = function() {
-
             // Usar los campos form para crear un nuevo objeto $resource cliente
             var cliente = new Clientes.ID({
                 nombre_cliente      : this.nombre_cliente,
@@ -25,13 +24,24 @@ angular.module('clientes').controller('ClientesController',
                 direccion_cliente   : this.direccion_cliente,
                 celular_cliente     : this.celular_cliente,
                 fijo_cliente        : this.fijo_cliente,
+                fecha_nac_cliente   : this.fecha_nac_cliente,
                 distrito        : this.distrito
-                
+
             });
 
             // Usar el método '$save' de cliente para enviar una petición POST apropiada
             cliente.$save(function(response) {
+                $scope.nombre_cliente="";
+                $scope.ape_pat_cliente="";
+                $scope.ape_mat_cliente="";
+                $scope.dni_cliente="";
+                $scope.direccion_cliente="";
+                $scope.celular_cliente="";
+                $scope.fijo_cliente="";
+                $scope.fecha_nac_cliente="";
+
                 $('#registrarcliente').modal('toggle');
+                alertify.log("Cliente registrado");
                 // Si un cliente fue creado de modo correcto, redireccionar al usuario a la página del cliente 
                 //$location.path('clientes/' + response._id);
                 
@@ -69,6 +79,7 @@ angular.module('clientes').controller('ClientesController',
             // Usar el método 'get' de cliente para enviar una petición GET apropiada
             $scope.cliente = Clientes.Apellido.get({apellido: ape },function(cliente) {
             $rootScope.showtablebusqueda=true;
+            $rootScope.boletapayments=false;
             console.log($scope.cliente);
             //console.log($scope.cliente);
             //console.log('Cantidad ' + $scope.cliente.length);
@@ -78,11 +89,14 @@ angular.module('clientes').controller('ClientesController',
 
 
 
+
+
         $scope.getBoletasByClientId=function(id){
             $http.get('/api/boleta/' + id)
             .success(function(data) {
-                $scope.boletapayments=true;
+            $rootScope.boletapayments=true;
                $scope.boletasxcliente=data;
+
             })
             .error(function(data) {
                 console.log('Error' + data);
@@ -94,27 +108,62 @@ angular.module('clientes').controller('ClientesController',
 
 
 
+
+                    
+                       
+                        
+
+
+        
             $scope.actualizarPago=function(id){
-            
 
-            $scope.boleta={"monto_pagado":this.montoapagar};
-            
-            $http.put('/api/boletas/'+id,$scope.boleta)
-            .success(function(data) {
-                var diferencia= (parseFloat(data.monto_facturado) - parseFloat(data.monto_pagado));
-                
 
-               alertify.alert('Cuota pagada correctamente, deuda actual: '+diferencia,function(){
-                $('#gestionarpagos').modal('toggle');
-                alertify.log("Has pagado una cuota satisfactoriamente");
-               });
-                $scope.cliente=[];
-                $scope.boletapayments=false;
+
+                var pagadoahora=this.montoapagar;
+                $scope.boleta={"monto_pagado":pagadoahora};
+                $http.get('/api/boletas/'+id)
+                            .success(function(data) {   
+                            $scope.boletaxid=data; 
     
-            })
-            .error(function(data) {
-                console.log('Error' + data);
-            });
+                           var pagadoantes=$scope.boletaxid.monto_pagado;
+                           var facturadoantes=$scope.boletaxid.monto_facturado;
+                           if(pagadoahora<=(parseFloat(facturadoantes)-parseFloat(pagadoantes))){
+                            
+                                $http.put('/api/boletas/'+id,$scope.boleta).success(function(boletas) {
+                                var diferencia= (parseFloat(boletas.monto_facturado) - parseFloat(boletas.monto_pagado));
+                                alertify.alert('Cuota pagada correctamente, deuda actual: S/.'+diferencia,function(){
+                                $('#gestionarpagos').modal('toggle');
+                                alertify.log("Has pagado una cuota satisfactoriamente");
+                                });
+                                $scope.cliente=[];
+                                $rootScope.boletapayments=false;
+        
+                                })
+                                .error(function(boletas) {
+                                    console.log('Error' + boletas);
+                                });
+
+                           }
+                           
+                           else if(pagadoahora>(parseFloat(facturadoantes)-parseFloat(pagadoantes))){
+                            alertify.alert("No puedes pagar un monto mayor a la deuda existente");
+                           }
+
+
+                        })
+            
+               
+          
+
+
+
+
+
+
+                   //});
+                   
+
+            
                     
             };
 

@@ -8,6 +8,7 @@ angular.module('boletas').controller('BoletasController',
         // Exponer el service Authentication
         $scope.authentication = Authentication;
         $scope.clientedata=[];
+        $scope.monto_pagado="";
 
         
 
@@ -81,7 +82,7 @@ angular.module('boletas').controller('BoletasController',
 
 
         $scope.actualizar=function(id){
-            $scope.boleta={"monto_pagado":$rootScope.facturado/2,
+            $scope.boleta={"monto_pagado":$rootScope.monto_pagado,
                             "monto_total":$rootScope.total,
                             "monto_descontado":$rootScope.desc,
                             "monto_facturado":$rootScope.facturado
@@ -89,13 +90,18 @@ angular.module('boletas').controller('BoletasController',
        
             $http.put('/api/boletas/'+id,$scope.boleta)
             .success(function(data) {
-                $scope.boleta = {};
+
+            $scope.boleta = {};
+            $rootScope.monto_pagado="";
             $rootScope.showcreardetalles=false;
             $rootScope.showclientname=false;
             $rootScope.showtablebusqueda=false;
             $rootScope.showbuscarcliente=true;
-
-    
+            $rootScope.tabledetalles=false;
+            $rootScope.detalles=[];
+            $scope.getTopTen();
+            $('#registrarventa').modal('toggle');
+             alertify.log("Venta Realizada correctamente");
             })
             .error(function(data) {
                 console.log('Error' + data);
@@ -104,6 +110,18 @@ angular.module('boletas').controller('BoletasController',
             };
 
 
+$scope.getTopTen=function(){
+
+      $http.get('/api/boletastop10')
+            .success(function(data) {
+            $rootScope.topten=data;
+                       
+    
+            })
+            .error(function(data) {
+                console.log('Error' + data);
+            })
+}
 
 
 

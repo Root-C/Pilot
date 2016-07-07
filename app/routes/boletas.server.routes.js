@@ -17,6 +17,9 @@ module.exports = function(app) {
 	   .put(boletas.update)
 	   .delete(boletas.delete);
 
+	app.route('/api/boletastop10')
+	.get(boletas.listTopTen);
+
 	app.route('/api/boleta/:ClienteID')
 	   .get(boletas.boletaByClient);
 

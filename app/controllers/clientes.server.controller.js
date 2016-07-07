@@ -128,9 +128,19 @@ exports.delete = function(req, res) {
 //Buscar Cliente por apellido
 exports.clienteByLastName = function(req, res, next,apellido) {
 	var apellido = req.params.apellido;
-	// Usar el método model 'findById' para encontrar un único cliente 
-		Cliente.find({'ape_pat_cliente' : new RegExp(apellido, 'i')},function(err, clientes) {
-		if(err){
+
+		Cliente.find({
+			      $and: [
+			          { $or: [{'ape_pat_cliente': new RegExp(apellido, 'i')}, 
+			          		  {'ape_mat_cliente': new RegExp(apellido, 'i')},
+			          		  {'dni_cliente': new RegExp(apellido, 'i')}
+			          		  ]}]},function(err, clientes) {
+			      
+	
+
+
+
+					if(err){
 			
 			console.log(err);
 		}

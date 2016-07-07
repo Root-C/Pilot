@@ -1,0 +1,22 @@
+<table class="table table-stripped table-responsive centrar" ng-controller="DetallesController">
+		<thead>
+				<tr>
+					<th>Codigo</th>
+					<th>Descripcion</th>
+					<th>Precio Total</th>
+					<th>Cantidad</th>
+					<th>Desc. Aplicado</th>
+					<th>Precio C/U</th>
+				</tr>
+		</thead>
+		<tbody>
+				<tr ng-repeat="item in detallesxcliente">
+					<td>{{item.idproducto}}</td>
+					<td>{{item.descripcionproducto}}</td>
+					<td>S/. {{item.preciofinal | number:2}}</td>
+					<td>{{item.cantidadproducto}}</td>
+					<td>S/. {{item.descuentoproducto | number:2}}</td>
+					<td>S/. {{item.precioproducto | number:2}}</td>
+				</tr>
+		</tbody>
+</table>

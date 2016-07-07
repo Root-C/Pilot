@@ -7,7 +7,7 @@ angular.module('detalles').controller('DetallesController',
     function($http, $scope, $rootScope, $routeParams, $location, Authentication, Detalles) {
         // Exponer el service Authentication
         $scope.authentication = Authentication;
-        $scope.detalles=[];
+        $rootScope.detalles=[];
 
  // Crear un nuevo método controller para crear nuevos articles
         $scope.createDetalle = function() {
@@ -16,17 +16,26 @@ angular.module('detalles').controller('DetallesController',
                 idboleta: $rootScope.idboleta,
                 idproducto: this.idproducto,
                 descripcionproducto: this.descripcionproducto,
-                precioproducto: this.precioproducto,
+
+               // precioproducto: this.precioproducto,
+
                 cantidadproducto: this.cantidadproducto,
                 descuentoproducto: this.descuentoproducto,
-                preciofinal: (this.precioproducto * this.cantidadproducto) - this.descuentoproducto
+
+                //preciofinal: (this.precioproducto * this.cantidadproducto) - this.descuentoproducto
+                preciofinal: this.preciofinal,
+                precioproducto:((this.preciofinal)/this.cantidadproducto)
             });
 
             // Usar el método '$save' de detalle para enviar una petición POST apropiada
             detalle.$save(function(response) {
-
-               $scope.detalles = Detalles.ForNum.get({idboleta: $rootScope.idboleta });
-               $scope.tabledetalles=true;
+                $scope.idproducto="";
+                $scope.descripcionproducto="";
+                $scope.preciofinal="";
+                $scope.cantidadproducto="";
+                $scope.descuentoproducto="";
+                $rootScope.detalles = Detalles.ForNum.get({idboleta: $rootScope.idboleta }); //Esto es un query de un service
+                $rootScope.tabledetalles=true;
 
                 // Si un artículo fue creado de modo correcto, redireccionar al usuario a la página del artículo 
                 console.log(response.idboleta);
@@ -40,7 +49,7 @@ angular.module('detalles').controller('DetallesController',
 
         $scope.findDetalles = function() {
             // Usar el método 'query' de article para enviar una petición GET apropiada
-            $scope.detalles = Detalles.query();
+            $rootScope.detalles = Detalles.query();
             console.log($scope.detalles);
   
         };
@@ -49,8 +58,8 @@ angular.module('detalles').controller('DetallesController',
 
         $scope.getParcial=function(){
             $rootScope.parcial = 0;
-            for(var i = 0; i < $scope.detalles.length; i++){
-            var detalle = $scope.detalles[i];
+            for(var i = 0; i < $rootScope.detalles.length; i++){
+            var detalle = $rootScope.detalles[i];
             $rootScope.parcial += (detalle.precioproducto * detalle.cantidadproducto);
             }
             return $rootScope.parcial;
@@ -60,8 +69,8 @@ angular.module('detalles').controller('DetallesController',
 
         $scope.getDescuentos=function(){
             $rootScope.desc = 0;
-            for(var i = 0; i < $scope.detalles.length; i++){
-            var detalle = $scope.detalles[i];
+            for(var i = 0; i < $rootScope.detalles.length; i++){
+            var detalle = $rootScope.detalles[i];
             $rootScope.desc += (detalle.descuentoproducto);
             }
             return $rootScope.desc;
@@ -71,9 +80,9 @@ angular.module('detalles').controller('DetallesController',
 
         $scope.getFacturado=function(){
             $rootScope.facturado=0;
-            for(var i = 0; i < $scope.detalles.length; i++){
-            var detalle = $scope.detalles[i];
-            $rootScope.facturado += (detalle.preciofinal);
+            for(var i = 0; i < $rootScope.detalles.length; i++){
+            var detalle = $rootScope.detalles[i];
+            $rootScope.facturado += (detalle.preciofinal - detalle.descuentoproducto);
             }
             return $rootScope.facturado;
                     
@@ -83,7 +92,7 @@ angular.module('detalles').controller('DetallesController',
         $scope.deleteDetalle = function(id) {
             $http.delete('/api/detalles/' + id)
             .success(function(data) {
-                $scope.detalles = data;
+                $rootScope.detalles = data;
                 console.log(data);
             })
             .error(function(data) {
@@ -91,6 +100,11 @@ angular.module('detalles').controller('DetallesController',
             });
         }
 
+
+        $scope.getDetailsForNumBoleta=function(number){
+             $rootScope.detallesxcliente=Detalles.ForNum.get({idboleta: number });
+             
+        }
 
 
         // Crear un nuevo método controller para recuperar un unico artículo

@@ -1,5 +1,6 @@
-<td colspan="5" class="negrita">Cantidad a pagar : </td>
+<td colspan="6" class="negrita">Cantidad a pagar : </td>
 						<td class="centrar">
-						<label>S/.{{facturado/2}}</label>
+						<input type="text" ng-model="$root.monto_pagado" class="form-control input-sm" placeholder="S/.{{facturado/2}}"/>
+						
 						</td>
 						<td class="centrar"><button ng-click="actualizar(_id)" class="btn btn-success btn-sm">Pagar</button></td>
