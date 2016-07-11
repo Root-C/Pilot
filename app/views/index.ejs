@@ -45,7 +45,7 @@
             <div class="page-header-inner ">
                 <!-- BEGIN LOGO -->
                 <div class="page-logo">
-                    <a href="index.html">
+                    <a href="/">
                         <img src="/lib/layouts/layout2/img/logo-default.png" alt="logo" class="logo-default" /> </a>
                     <div class="menu-toggler sidebar-toggler">
                         <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -74,7 +74,7 @@
                             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                             
                             <li class="dropdown dropdown-user" ng-controller="ClientesController">
-                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <a href="http://www.facebook.com/" target="_blank" data-hover="dropdown" data-close-others="true">
                                     <img alt="" class="img-circle" src="/lib/layouts/layout2/img/avatar3_small.jpg" />
                                     <span class="username username-hide-on-mobile" ng-bind="authentication.user.fullName"></span>
 
@@ -83,7 +83,7 @@
                                    
                                 </a>
                         
-                                <ul class="dropdown-menu dropdown-menu-default">
+                              <!--  <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
                                         <a href="page_user_profile_1.html">
                                             <i class="icon-user"></i> My Profile </a>
@@ -122,7 +122,7 @@
 
                                     </li>
 
-                                </ul>
+                                </ul>-->
                             </li>
 
                             <!-- END USER LOGIN DROPDOWN -->
@@ -211,15 +211,15 @@
              
                     <div class="row">
 
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <a class="dashboard-stat dashboard-stat-v2 blue" data-toggle="modal" data-target="#registrarcliente">
                                 <div class="visual">
                                     <i class="icon-comments"></i>
                                 </div>
                                 <div class="details">
                                     <div class="number">
-                                        Clientes:
-                                        <span data-counter="counterup" data-value="1349">0</span>
+                                        Clientes
+                                        <!--<span data-counter="counterup" data-value="1349">0</span>-->
                                     </div>
                                     <div class="desc"> Registrar Cliente </div>
 
@@ -228,22 +228,22 @@
                             </a>
                         </div>
 
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <a class="dashboard-stat dashboard-stat-v2 red" data-toggle="modal" data-target="#registrarventa">
                                 <div class="visual">
                                     <i class="icon-money"></i>
                                 </div>
                                 <div class="details">
                                     <div class="number">
-                                        Ventas:
-                                        <span data-counter="counterup" data-value="12,5">0</span>
+                                        Ventas
+                                        <!--<span data-counter="counterup" data-value="12,5">0</span>-->
                                     </div>
                                     <div class="desc"> Nueva venta </div>
                                 </div>
                             </a>
                         </div>
 
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <a class="dashboard-stat dashboard-stat-v2 green" data-toggle="modal" data-target="#gestionarpagos">
                                 <div class="visual">
                                     <i class="icon-shopping-cart"></i>
@@ -260,7 +260,7 @@
                             </a>
                         </div>
 
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                      <!--  <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <a class="dashboard-stat dashboard-stat-v2 purple" href="#">
                                 <div class="visual">
                                     <i class="icon-globe"></i>
@@ -271,7 +271,7 @@
                                     <div class="desc"> Reportes </div>
                                 </div>
                             </a>
-                        </div>
+                        </div>-->
 
                     </div>
 
@@ -288,17 +288,27 @@
                                         <i class="icon-bar-chart font-dark hide"></i>
                                         <span class="caption-subject font-dark bold uppercase">Ultimos 10 usuarios atendidos</span>
                                     </div>
-                                    <div class="actions">
-                                        <div class="btn-group btn-group-devided" data-toggle="buttons">
-                                          
-                                                <input type="text" class="form-control input-sm"/> 
-                                         
-                                        </div>
+
+                                     <div class="row">
+                                        <div class="col-md-12">
+
+                                           <div class="input-group">
+                                                <input type="text" class="form-control input-sm" ng-model="apellido"/> 
+                                                <div class="input-group-btn">
+                                                <button type="button" ng-click="GetClientbyLastName(ape)" class="btn btn-default btn-sm">Filtrar</button>
+                                                </div>
+                                            </div>
+                                         </div>
                                     </div>
+
+
+
+
+
                                 </div>
 
                                 <div class="portlet-body" ng-controller="BoletasController">
-                                    <table class="table table-responsive table-striped centrar" ng-init="getTopTen()">
+                                    <table class="table table-responsive table-striped centrar10" ng-init="getTopTen()">
                                         <thead>
                                             <tr class="headercenter">
                                                 <th>N°</th>
@@ -307,12 +317,12 @@
                                                 <th>Facturado</th>
                                                 <th>Pagado</th>
                                                 <th>Pendiente</th>
-                                                <th>Acciones</th> 
+                                                <th>Ver</th> 
                                                 
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="item in topten">
+                                            <tr ng-repeat="item in topten | filter:apellido">
                                                 <td>{{item.idboleta}}</td>
                                                 <td class="left">{{item.idcliente.nombre_cliente}} {{item.idcliente.ape_pat_cliente}}</td>
                                                 <td>{{item.fecha_trans | date :  "dd/MM/y"}}</td>
@@ -320,7 +330,7 @@
                                                 <td>S/. {{item.monto_pagado}}</td>
                                                 <td class="verde">S/. {{item.monto_facturado - item.monto_pagado | number:0}}</td>
                                                 <td ng-controller="DetallesController">
-                                                 <a ng-click="getDetailsForNumBoleta(item.idboleta)" role="button" data-toggle="modal" data-target="#detallesxcliente">Ver</a>
+                                                 <a ng-click="getDetailsForNumBoleta(item.idboleta)" role="button" data-toggle="modal" data-target="#detallesxcliente"><i class="icon-search"></i></a>
                                                 </td>
                                                
                                             </tr>
@@ -340,29 +350,49 @@
                                 <div class="portlet-title">
                                     <div class="caption">
                                         <i class="icon-share font-red-sunglo hide"></i>
-                                        <span class="caption-subject font-dark bold uppercase">Ultimos clientes atendidos</span>
-                                        <!--<span class="caption-helper">monthly stats...</span>-->
+                                    <span class="caption-subject font-dark bold uppercase">Vista rápida de deudores</span>
                                     </div>
+                              
+                                    <div class="row">
+                                        <div class="col-md-12">
+
+                                           <div class="input-group">
+                                                <input type="text" class="form-control input-sm"/> 
+                                                <div class="input-group-btn">
+                                                <button type="button" ng-click="GetClientbyLastName(ape)" class="btn btn-default btn-sm">Buscar</button>
+                                                </div>
+                                            </div>
+                                         </div>
+                                    </div>
+
+                                         
+                                   
                                 
                                 </div>
                                 <div class="portlet-body" ng-controller="BoletasController">
-                                    <table class="table table-responsive table-striped" ng-init="getTopTen()">
+                                    <table class="table table-responsive table-striped centrar10" ng-init="getTopTenUpdated()">
                                         <thead>
-                                            <tr>
+                                            <tr class="headervisits">
                                                 <th>Nombre Cliente</th>
                                                 <th>Fecha Transaccion</th>
                                                 <th>Facturado</th>
                                                 <th>Pagado</th>
+                                                <th>Pendiente</th>
+                                                <th>Ver</th>
                                                 
                                             
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="item in topten">
+                                            <tr ng-repeat="item in toptendate">
                                                 <td>{{item.idcliente.nombre_cliente}} {{item.idcliente.ape_pat_cliente}} {{item.idcliente.ape_mat_cliente}}</td>
                                                 <td>{{item.fecha_trans | date :  "dd/MM/y"}}</td>
                                                 <td>S/. {{item.monto_facturado}}</td>
                                                 <td>S/. {{item.monto_pagado}}</td>
+                                                <td class="verde">S/. {{item.monto_facturado - item.monto_pagado | number:0}}</td>
+                                                <td ng-controller="DetallesController">
+                                                 <a ng-click="getDetailsForNumBoleta(item.idboleta)" role="button" data-toggle="modal" data-target="#detallesxcliente"><i class="icon-search"></i></a>
+                                                </td>
                                             </tr>
 
 
@@ -403,6 +433,11 @@
         <div ng-include="'/modals/modal-payments.client.view.html'"></div>
 
         <div ng-include="'/modals/modal-detailsperclient.client.view.html'"></div>
+
+        <div ng-include="'/modals/modal-detailsdashboardclient.client.view.html'"></div>
+
+
+
 
 
 

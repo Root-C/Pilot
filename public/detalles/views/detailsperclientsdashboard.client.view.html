@@ -1,3 +1,4 @@
+
 <table class="table table-stripped table-responsive centrar" ng-controller="DetallesController">
 		<thead>
 				<tr>
@@ -10,7 +11,7 @@
 				</tr>
 		</thead>
 		<tbody>
-				<tr ng-repeat="item in detallesxcliente">
+				<tr ng-repeat="item in detallesxclientedashboard">
 					<td>{{item.idproducto}}</td>
 					<td>{{item.descripcionproducto}}</td>
 					<td>S/. {{item.preciofinal | number:2}}</td>
@@ -20,6 +21,3 @@
 				</tr>
 		</tbody>
 </table>
-
-
-

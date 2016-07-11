@@ -133,13 +133,10 @@ exports.clienteByLastName = function(req, res, next,apellido) {
 			      $and: [
 			          { $or: [{'ape_pat_cliente': new RegExp(apellido, 'i')}, 
 			          		  {'ape_mat_cliente': new RegExp(apellido, 'i')},
+			          		  {'nombre_cliente': new RegExp(apellido, 'i')},
 			          		  {'dni_cliente': new RegExp(apellido, 'i')}
 			          		  ]}]},function(err, clientes) {
 			      
-	
-
-
-
 					if(err){
 			
 			console.log(err);

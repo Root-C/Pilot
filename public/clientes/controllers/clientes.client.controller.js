@@ -69,6 +69,7 @@ angular.module('clientes').controller('ClientesController',
            $rootScope.boletagenerate=true;
            $rootScope.showclientname=true;
            $rootScope.showtablebusqueda=!$scope.showtablebusqueda;
+           //$rootScope.showbuscarcliente=false;
 
 
         };
@@ -95,6 +96,7 @@ angular.module('clientes').controller('ClientesController',
             $http.get('/api/boleta/' + id)
             .success(function(data) {
             $rootScope.boletapayments=true;
+
                $scope.boletasxcliente=data;
 
             })
@@ -109,18 +111,29 @@ angular.module('clientes').controller('ClientesController',
 
 
 
-                    
+          
+$scope.hola=function(){
+$rootScope.showcreardetalles=false;
+            $rootScope.showclientname=false;
+            $rootScope.showtablebusqueda=false;
+            $rootScope.showbuscarcliente=true;
+            $rootScope.tabledetalles=false;
+            $rootScope.boletagenerate=false;
+            $rootScope.detalles=[];
+            $('#registrarventa').modal('toggle');
+
+    
+};          
                        
                         
 
 
         
             $scope.actualizarPago=function(id){
-
-
-
                 var pagadoahora=this.montoapagar;
-                $scope.boleta={"monto_pagado":pagadoahora};
+                $scope.boleta={"monto_pagado":pagadoahora,
+                                "updated_at":moment().format()
+                                };
                 $http.get('/api/boletas/'+id)
                             .success(function(data) {   
                             $scope.boletaxid=data; 
@@ -142,30 +155,26 @@ angular.module('clientes').controller('ClientesController',
                                 .error(function(boletas) {
                                     console.log('Error' + boletas);
                                 });
+                                
 
-                           }
-                           
+
+                           }                           
                            else if(pagadoahora>(parseFloat(facturadoantes)-parseFloat(pagadoantes))){
                             alertify.alert("No puedes pagar un monto mayor a la deuda existente");
                            }
 
-
                         })
-            
-               
-          
-
-
-
-
-
-
-                   //});
-                   
-
-            
-                    
+                
             };
+
+
+            //Al cerrar modal
+            $scope.dismiss=function(){
+                $scope.cliente=[];
+                $rootScope.boletapayments=false;
+
+            }
+
 
 
  // Crear un nuevo método controller para actualizar un único cliente

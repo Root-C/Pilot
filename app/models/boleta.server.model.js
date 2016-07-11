@@ -3,13 +3,14 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
+
 var BoletaSchema = new Schema({
   idboleta: {
     type: Number
   },
   fecha_trans: {
     type: Date,
-    default: Date.now
+    default:Date.now
   },
   monto_total: {
     type:Number,
@@ -33,6 +34,13 @@ var BoletaSchema = new Schema({
   idcliente: {
     type: Schema.ObjectId,
     ref: 'Cliente'
+  },
+  status: {
+    type: Number
+  },
+  updated_at: {
+    type: Date,
+    default:Date.now
   }
 });
 

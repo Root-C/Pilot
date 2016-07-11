@@ -24,7 +24,7 @@ var getErrorMessage = function(err) {
 exports.create = function(req, res) {
 	Boleta.find().count(function(err, count) {
 	boletascant= count+1;
-	
+  	
 	
 	// Crear un nuevo objeto artículo
 	var boleta = new Boleta(req.body);
@@ -32,6 +32,7 @@ exports.create = function(req, res) {
 	// Configurar la propiedad 'creador' del artículo
 	boleta.idboleta= boletascant;
 	boleta.idusuario="Admin";
+	boleta.status=0;
 
 
 	// Intentar salvar el artículo
@@ -55,7 +56,7 @@ exports.create = function(req, res) {
 // Crear un nuevo método controller que recupera una lista de artículos
 exports.list = function(req, res) {
 	// Usar el método model 'find' para obtener una lista de artículos
-	Boleta.find().sort('-idboleta').populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
+	Boleta.find({status: 1}).sort('-idboleta').populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
 		if (err) {
 			// Si un error ocurre enviar un mensaje de error
 			return res.status(400).send({
@@ -70,8 +71,24 @@ exports.list = function(req, res) {
 
 
 exports.listTopTen = function(req, res) {
-	// Usar el método model 'find' para obtener una lista de artículos
-	Boleta.find().sort('-idboleta').limit(10).populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
+	// Usar el método model 'find' para obtener una lista de artículos 
+	Boleta.find({status: 1}).sort('-idboleta').limit(10).populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
+		if (err) {
+			// Si un error ocurre enviar un mensaje de error
+			return res.status(400).send({
+				message: getErrorMessage(err)
+			});
+		} else {
+			// Enviar una representación JSON del artículo 
+			res.json(boletas);
+		}
+	});
+};
+
+
+exports.listTopTenSortDate = function(req, res) {
+	// Usar el método model 'find' para obtener una lista de artículos 
+	Boleta.find({status: 1}).sort('-updated_at').limit(10).populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
 		if (err) {
 			// Si un error ocurre enviar un mensaje de error
 			return res.status(400).send({
@@ -102,7 +119,7 @@ exports.boletaByID = function(req, res, next, id) {
 
 exports.boletaByClientID = function(req,res,next,id){
 	
-	Boleta.find({'idcliente' : id}).populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
+	Boleta.find({'idcliente' : id,status: 1}).populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
 		if (err) return next(err);
 		if (!boletas) return next(new Error('Fallo al cargar la boleta ' + id));
 
@@ -114,6 +131,41 @@ exports.boletaByClientID = function(req,res,next,id){
 	});
 
 };
+
+
+
+//Por fecha Quedaa
+exports.boletaByDates = function(req,res,next){
+var start=req.params.start;
+var end=req.params.end;
+	Boleta.find(
+		{"fecha_trans": {"$gte": new Date(start), "$lt": new Date(end)}})
+		//{"fecha_trans": {"$gte": new Date(start)}})
+		.populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
+		if (err) return next(err);
+		if (!boletas) return next(new Error('Fallo al cargar la boleta ' + id));
+
+		// Si un artículo es encontrado usar el objeto 'request' para pasarlo al siguietne middleware
+		req.boletabydate = boletas;
+
+		// Llamar al siguiente middleware
+		next();
+	});
+
+};
+
+
+//db.boletas.find({fecha_trans: {"$gte": new Date("2016-07-09T14:23:04.799Z"),"$lt": new Date("2016-07-10T14:23:04.799Z")}})
+
+
+
+
+exports.boletaByDate = function(req, res) {
+	res.json(req.boletabydate);
+};
+
+
+
 
 exports.boletaByClient = function(req, res) {
 	res.json(req.boletabyclient);
@@ -149,6 +201,16 @@ exports.update = function(req, res) {
 	if(req.body.monto_pagado){
 	boleta.monto_pagado= (parseFloat(boleta.monto_pagado) + parseFloat(req.body.monto_pagado));
 	}
+
+	if(req.body.status){
+	boleta.status=req.body.status;
+	}
+
+
+	if(req.body.updated_at){
+	boleta.updated_at=req.body.updated_at;
+	}
+	
 	
 
 
@@ -186,5 +248,4 @@ exports.delete = function(req, res) {
 		}
 	});
 };
-
 

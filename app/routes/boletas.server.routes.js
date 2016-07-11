@@ -20,12 +20,21 @@ module.exports = function(app) {
 	app.route('/api/boletastop10')
 	.get(boletas.listTopTen);
 
+	app.route('/api/toptendate')
+	.get(boletas.listTopTenSortDate);
+
 	app.route('/api/boleta/:ClienteID')
 	   .get(boletas.boletaByClient);
 
+	app.route('/api/fecha/:start/:end')
+		.get(boletas.boletaByDate);
+
 	// Configurar el parámetro middleware 'articleId'  
 	app.param('boletaId', boletas.boletaByID);
-	app.param('ClienteID', boletas.boletaByClientID); 
+	app.param('ClienteID', boletas.boletaByClientID);
+	app.param(['start', 'end'],boletas.boletaByDates); 
+	//app.param('end',boletas.boletaByDates); 
+
 
 };
 

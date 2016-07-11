@@ -18,6 +18,8 @@ angular.module('boletas').controller('BoletasController',
             // Usar los campos form para crear un nuevo objeto $resource Boleta
             var boleta = new Boletas({
               idcliente: $rootScope.idcliente
+             
+
             });
 
             // Usar el método '$save' de boleta para enviar una petición POST apropiada
@@ -26,6 +28,7 @@ angular.module('boletas').controller('BoletasController',
                 // Si un artículo fue creado de modo correcto, redireccionar al usuario a la página del artículo 
                 //$location.path('boletas/' + response._id);
                 if($rootScope.idcliente){
+               
                 console.log("el id del cliente es: " + $rootScope.idcliente);
                  $rootScope.idboleta = response.idboleta;
                  $rootScope._id=response._id;
@@ -85,12 +88,13 @@ angular.module('boletas').controller('BoletasController',
             $scope.boleta={"monto_pagado":$rootScope.monto_pagado,
                             "monto_total":$rootScope.total,
                             "monto_descontado":$rootScope.desc,
-                            "monto_facturado":$rootScope.facturado
+                            "monto_facturado":$rootScope.facturado,
+                            "updated_at":moment().format(),
+                            "status":1
                             };
        
             $http.put('/api/boletas/'+id,$scope.boleta)
             .success(function(data) {
-
             $scope.boleta = {};
             $rootScope.monto_pagado="";
             $rootScope.showcreardetalles=false;
@@ -123,6 +127,17 @@ $scope.getTopTen=function(){
             })
 }
 
+$scope.getTopTenUpdated=function(){
+
+      $http.get('/api/toptendate')
+            .success(function(data) {
+            $rootScope.toptendate=data;
+                       
+            })
+            .error(function(data) {
+                console.log('Error' + data);
+            })
+}
 
 
 

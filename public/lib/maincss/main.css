@@ -31,10 +31,17 @@ table th td{
 	text-align: center;	
 }
 
-.centrar td{
+.centrar{
 	text-align:center;
 	font-size:12px!important;	
 }
+
+
+.centrar10 td{
+	text-align:center;
+	font-size:12px!important;	
+}
+
 
 
 .headercenter th{
@@ -55,3 +62,10 @@ table th td{
 	
 }
 
+
+.headervisits th{
+	text-align:center;
+	background-color: #F8FFDA;
+	color: #010101;
+	font-size:12px!important;	
+}

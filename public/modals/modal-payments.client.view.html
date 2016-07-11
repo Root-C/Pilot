@@ -1,13 +1,13 @@
-<div id="gestionarpagos" class="modal fade" role="dialog">
+<div id="gestionarpagos" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-lg">
 
                 <!-- Modal content-->
-                <div class="modal-content">
+                <div class="modal-content" ng-controller="ClientesController">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close" data-dismiss="modal" ng-click="dismiss()">&times;</button>
                         <h4 class="modal-title">Gestion de Pagos</h4>
                     </div>
-                    <div class="modal-body" ng-controller="ClientesController">
+                    <div class="modal-body">
 
                          <div ng-include="'../clientes/views/search-cliente.client.view.html'"></div>
                          <div ng-include="'../pagos/views/table-result-clienteboletas.client.view.html'"></div>

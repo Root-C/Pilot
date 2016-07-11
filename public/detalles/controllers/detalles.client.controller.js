@@ -103,10 +103,21 @@ angular.module('detalles').controller('DetallesController',
 
         $scope.getDetailsForNumBoleta=function(number){
              $rootScope.detallesxcliente=Detalles.ForNum.get({idboleta: number });
-             
+
         }
 
+        $scope.getDetailsDashBoard=function(number){
+             $rootScope.detallesxclientedashboard=Detalles.ForNum.get({idboleta: number });
+              $('#gestionarpagos').modal('toggle');
+                   
+        }
 
+        $scope.back=function(){
+             $('#detallesdashboard').modal('toggle');
+             $('#gestionarpagos').modal('show');
+
+        }
+       
         // Crear un nuevo método controller para recuperar un unico artículo
 
 
