@@ -3,8 +3,8 @@
 
 // Crear el controller 'boletas' --> Que llama a los servicios boletas
 angular.module('boletas').controller('BoletasController', 
-    ['$http','$rootScope','$scope', '$routeParams', '$location', 'Authentication', 'Boletas','Distritos','Clientes',
-    function($http, $rootScope, $scope, $routeParams, $location, Authentication, Boletas, Distritos, Clientes) {
+    ['$http','$rootScope','$scope', '$routeParams', '$location', 'Authentication', 'Boletas','Distritos','Clientes','Pagos',
+    function($http, $rootScope, $scope, $routeParams, $location, Authentication, Boletas, Distritos, Clientes, Pagos) {
         // Exponer el service Authentication
         $scope.authentication = Authentication;
         $scope.clientedata=[];
@@ -85,13 +85,19 @@ angular.module('boletas').controller('BoletasController',
 
 
         $scope.actualizar=function(id){
-            $scope.boleta={"monto_pagado":$rootScope.monto_pagado,
-                            "monto_total":$rootScope.total,
-                            "monto_descontado":$rootScope.desc,
-                            "monto_facturado":$rootScope.facturado,
-                            "updated_at":moment().format(),
-                            "status":1
-                            };
+            //monto pagado, el monto que se paga por item, en totales
+            //monto_total= el monto que se calcula sin descuentos
+            //monto_descontado= el monto descontado total
+            //monto_facturado, el total con descuentos.
+            $scope.boleta=
+            {
+              "monto_pagado":$rootScope.payperitem,
+              "monto_total":$rootScope.parcial,
+              "monto_descontado":$rootScope.desc,
+              "monto_facturado":$rootScope.facturado,
+              "updated_at":moment().format(),
+              "status":1
+            };
        
             $http.put('/api/boletas/'+id,$scope.boleta)
             .success(function(data) {
@@ -101,7 +107,38 @@ angular.module('boletas').controller('BoletasController',
             $rootScope.showclientname=false;
             $rootScope.showtablebusqueda=false;
             $rootScope.showbuscarcliente=true;
-            $rootScope.tabledetalles=false;
+            $rootScope.tabledetalles=false;  
+
+                for(var i=0; i < $rootScope.detalles.length;i++){
+                    var fila=$rootScope.detalles[i]; 
+                    var monto_pagado=fila.payperitem;
+                    var iddetalle=fila._id;
+                    var idboleta=fila.idboleta;
+                    var idproducto=fila.idproducto;
+                    var descripcionproducto=fila.descripcionproducto;
+                    var preciofacturado=fila.preciofacturado;
+                    var cantidadproducto=fila.cantidadproducto;
+                    var precioproducto=preciofacturado/cantidadproducto;
+
+                if(monto_pagado>0){
+                    var pago = new Pagos({
+                        idboleta      : idboleta,
+                        idproducto     : idproducto,
+                        descripcionproducto     : descripcionproducto,
+                        precioproducto         : precioproducto,
+                        cantidadproducto   : cantidadproducto,
+                        preciofacturado     : preciofacturado,
+                        monto_pagado       : monto_pagado,
+                        monto_cancelado : monto_pagado,
+                        iddetalle: iddetalle,
+                        fecha_trans   : moment().format()                
+                    });
+                    pago.$save(function(response) { 
+                    alertify.alert("Se registro el pago");   
+                    });
+                }
+                }    
+            
             $rootScope.detalles=[];
             $scope.getTopTen();
             $('#registrarventa').modal('toggle');

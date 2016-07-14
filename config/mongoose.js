@@ -25,8 +25,12 @@ module.exports = function() {
 	//Cargar el modelo Boletas
 	require('../app/models/boleta.server.model');
 
-	//Cargar el modelo Boletas
+	//Cargar el modelo Detalles
 	require('../app/models/detalle.server.model');
+
+	//Cargar el modelo Pagos
+	require('../app/models/pago.server.model');
+
 
 
 	// Devolver la instancia de conexión a Mongoose

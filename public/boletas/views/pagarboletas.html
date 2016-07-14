@@ -1,9 +1,10 @@
-<td colspan="6" class="negrita">Cantidad a pagar : </td>
-						<td class="centrar">
-						<input type="text" ng-model="$root.monto_pagado" class="form-control input-sm" placeholder="S/.{{facturado/2}}"/>
+<td colspan="6" class="negrita">Deuda pendiente : </td>
+						<td class="centrar negrita">S/. {{getFacturado() - getPPPi()}}</td> 
 						
 						</td>
 						<td class="centrar"><button ng-click="actualizar(_id)" class="btn btn-success btn-sm">Pagar</button>
 				
 						</td>
 						
+
+					

@@ -22,8 +22,6 @@ exports.create = function(req, res) {
 	// Crear un nuevo objeto artículo
 	var detalle = new Detalle(req.body);
 
-	// Configurar la propiedad 'creador' del artículo
-	detalle.creador = req.user;
 
 	// Intentar salvar el artículo
 	detalle.save(function(err) {
@@ -87,8 +85,7 @@ exports.update = function(req, res) {
 	var detalle = req.detalle;
 
 	// Actualizar los campos artículo
-	detalle.titulo = req.body.titulo;
-	detalle.contenido = req.body.contenido;
+	detalle.payperitem = (parseFloat(detalle.payperitem) + parseFloat(req.body.payperitem));
 
 	// Intentar salvar el artículo actualizado
 	detalle.save(function(err) {

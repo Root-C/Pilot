@@ -11,6 +11,21 @@ angular.module('detalles').controller('DetallesController',
 
  // Crear un nuevo método controller para crear nuevos articles
         $scope.createDetalle = function() {
+
+            if(!this.cantidadproducto){
+                    this.cantidadproducto=1;
+                };
+
+            if(!this.descuentoproducto){
+                    this.descuentoproducto=0;
+                };
+
+            if(!this.pagoinicial){
+                    this.pagoinicial=0;
+                };
+
+
+
             // Usar los campos form para crear un nuevo objeto $resource detalle
             var detalle = new Detalles.ID({
                 idboleta: $rootScope.idboleta,
@@ -18,12 +33,14 @@ angular.module('detalles').controller('DetallesController',
                 descripcionproducto: this.descripcionproducto,
 
                // precioproducto: this.precioproducto,
-
-                cantidadproducto: this.cantidadproducto,
+               
+                cantidadproducto: this.cantidadproducto, 
                 descuentoproducto: this.descuentoproducto,
+                payperitem: this.pagoinicial,
 
                 //preciofinal: (this.precioproducto * this.cantidadproducto) - this.descuentoproducto
                 preciofinal: this.preciofinal,
+                preciofacturado:this.preciofinal-this.descuentoproducto,
                 precioproducto:((this.preciofinal)/this.cantidadproducto)
             });
 
@@ -34,8 +51,13 @@ angular.module('detalles').controller('DetallesController',
                 $scope.preciofinal="";
                 $scope.cantidadproducto="";
                 $scope.descuentoproducto="";
+                $scope.pagoinicial="";
                 $rootScope.detalles = Detalles.ForNum.get({idboleta: $rootScope.idboleta }); //Esto es un query de un service
                 $rootScope.tabledetalles=true;
+                //console.log($rootScope.detalles);
+
+
+
 
                 // Si un artículo fue creado de modo correcto, redireccionar al usuario a la página del artículo 
                 console.log(response.idboleta);
@@ -68,14 +90,22 @@ angular.module('detalles').controller('DetallesController',
 
 
         $scope.getDescuentos=function(){
+            //INICIALIZAMOS EL DESCUENTO EN CERO
             $rootScope.desc = 0;
+            //PARA I=0 I MENOR QUE QUE LA CANTIDAD DE FILAS E I++
             for(var i = 0; i < $rootScope.detalles.length; i++){
+
+            //ASIGNAMOS A LA VARIABLE DETALLES EL ARRAY CON SUS CAMPOS, EMPEZAMOS POR EL INDICE CERO
             var detalle = $rootScope.detalles[i];
+            //CAPTURAMOS EL DESCUENTO DE LA FILA CERO Y LO AÑADIMOS
             $rootScope.desc += (detalle.descuentoproducto);
             }
             return $rootScope.desc;
 
         };
+
+
+
 
 
         $scope.getFacturado=function(){
@@ -88,6 +118,23 @@ angular.module('detalles').controller('DetallesController',
                     
         }
 
+        //Get Partial Pay Per Item
+        $scope.getPPPi=function() {
+            // body...
+            $rootScope.payperitem=0;
+            for(var i = 0; i < $rootScope.detalles.length; i++){
+                //partial pay per item
+            var detalle = $rootScope.detalles[i];
+            $rootScope.payperitem += (detalle.payperitem);
+            }
+            return $rootScope.payperitem;
+
+        }
+
+
+
+
+
 
         $scope.deleteDetalle = function(id) {
             $http.delete('/api/detalles/' + id)
@@ -99,6 +146,7 @@ angular.module('detalles').controller('DetallesController',
                 console.log('Error' + data);
             });
         }
+
 
 
         $scope.getDetailsForNumBoleta=function(number){

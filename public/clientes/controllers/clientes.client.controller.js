@@ -3,8 +3,8 @@
 
 // Crear el controller 'clientes' --> Que llama a los servicios Clientes
 angular.module('clientes').controller('ClientesController', 
-    ['$http','$rootScope','$scope', '$routeParams', '$location', 'Authentication', 'Clientes', 'Distritos', 'Boletas',
-    function($http,$rootScope, $scope, $routeParams, $location, Authentication, Clientes, Distritos, Boletas) {
+    ['$http','$rootScope','$scope', '$routeParams', '$location', 'Authentication', 'Clientes', 'Distritos','Pagos', 'Boletas', 
+    function($http,$rootScope, $scope, $routeParams, $location, Authentication, Clientes, Distritos, Pagos, Boletas) {
         // Exponer el service Authentication
         $scope.authentication = Authentication;
         $rootScope.showtablebusqueda=false;
@@ -50,6 +50,38 @@ angular.module('clientes').controller('ClientesController',
                 $scope.error = errorResponse.data.message;
             });
         };
+
+
+ $scope.createPayment = function() {
+            // Usar los campos form para crear un nuevo objeto $resource cliente
+            var pago = new Pagos({
+                idboleta      : idboleta,
+                idproducto     : idproducto,
+                descripcionproducto     : descripcionproducto,
+                precioproducto         : precioproducto,
+                cantidadproducto   : cantidadproducto,
+                preciofacturado     : preciofacturado,
+                monto_pagado       : monto_pagado + pendiente,
+                monto_cancelado : pendiente,
+                iddetalle: iddetalle,
+                fecha_trans   : moment().format()                
+            });
+
+            // Usar el método '$save' de cliente para enviar una petición POST apropiada
+            pago.$save(function(response) {
+                alertify.alert("Se registró un pago =O");
+                // Si un cliente fue creado de modo correcto, redireccionar al usuario a la página del cliente 
+                //$location.path('clientes/' + response._id);
+                
+            }, function(errorResponse) {
+                // En otro caso, presentar al usuario el mensaje de error
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+
+                                            
+
 
 // Crear un nuevo método controller para recuperar una lista de clientes
         $scope.findClient = function() {
@@ -129,34 +161,206 @@ $rootScope.showcreardetalles=false;
 
 
         
+            
             $scope.actualizarPago=function(id){
+                //igualamos el scope montoapagar a la variable pagadoahora
                 var pagadoahora=this.montoapagar;
+
+                //creamos scope para actualizar data
                 $scope.boleta={"monto_pagado":pagadoahora,
                                 "updated_at":moment().format()
                                 };
+
+                //llamamos a la boleta que vamos a actualizar
                 $http.get('/api/boletas/'+id)
-                            .success(function(data) {   
+                            .success(function(data) { 
+                            //capturamos a la boleta traida en el scope  
                             $scope.boletaxid=data; 
-    
-                           var pagadoantes=$scope.boletaxid.monto_pagado;
-                           var facturadoantes=$scope.boletaxid.monto_facturado;
-                           if(pagadoahora<=(parseFloat(facturadoantes)-parseFloat(pagadoantes))){
                             
+
+                            //capturamos el valor anterior pagado
+                           var pagadoantes=$scope.boletaxid.monto_pagado;
+                           var idboleta=$scope.boletaxid.idboleta;
+
+                           //Capturo el valor facturado de la boleta en mencion
+                           var facturadoantes=$scope.boletaxid.monto_facturado;
+
+                           //Pregunto si el pago actual es menor a la resta del facturado con el pagado anteriormente, 
+                           //con esto verifico si el mongo pagado actual es menor a la deuda o igual
+                           if(pagadoahora<=(parseFloat(facturadoantes)-parseFloat(pagadoantes))){
+                               
+
+                                //INICIO DEL PUT
+                                //Si el monto pagado actual es menor a la deuda, actualizamos
                                 $http.put('/api/boletas/'+id,$scope.boleta).success(function(boletas) {
+                                //luego de hacer la actualizacion, traemos el dato actualizado y 
+                                //restamos el monto facturado con el monto_pagado nuevo
                                 var diferencia= (parseFloat(boletas.monto_facturado) - parseFloat(boletas.monto_pagado));
+                                //Mostramos la diferencia, deuda actual
                                 alertify.alert('Cuota pagada correctamente, deuda actual: S/.'+diferencia,function(){
-                                $('#gestionarpagos').modal('toggle');
-                                alertify.log("Has pagado una cuota satisfactoriamente");
-                                });
-                                $scope.cliente=[];
-                                $rootScope.boletapayments=false;
+                                //Cerramos el modal y enviamos una alerta
+                                    $('#gestionarpagos').modal('toggle');
+                                    alertify.log("Has pagado una cuota satisfactoriamente");
+                                    });
+                                    $scope.cliente=[];
+                                    $rootScope.boletapayments=false;
         
                                 })
                                 .error(function(boletas) {
                                     console.log('Error' + boletas);
                                 });
+                                //FIN DEL PUT
+
+                                //CONDICIONAL DETALLES PAYMENT
+                                //Traigo todo el array de la boleta
+                                 $http.get('/api/detalle/' + idboleta)
+                                .success(function(data) {
+                                //Asigno el array a un scope
+                                $rootScope.detallepayments=data;
                                 
 
+                                //DETALLESPAYMENT
+                                for(var i=0; i < $rootScope.detallepayments.length;i++){
+                                  var fila=$rootScope.detallepayments[i];
+                                  var preciofila=fila.preciofacturado;
+                                  var monto_pagado=fila.payperitem;
+                                  var iddetalle=fila._id;
+                                  var idboleta=fila.idboleta;
+                                  var idproducto=fila.idproducto;
+                                  var descripcionproducto=fila.descripcionproducto;
+                                  var preciofacturado=fila.preciofacturado;
+                                  var cantidadproducto=fila.cantidadproducto;
+                                  var precioproducto=preciofacturado/cantidadproducto;
+                                  var pagado=fila.payperitem;
+
+
+
+                                    
+                                if(preciofila>monto_pagado && pagadoahora>=preciofila){
+                                    var pendiente=preciofila-monto_pagado;
+                                    pagadoahora=pagadoahora-pendiente;
+                                    console.log("pagó "+pendiente);
+                                    console.log("iddetalle es :" +iddetalle);
+                                    $scope.payupdate={"payperitem":pendiente
+                                                            };
+                                            //ACTUALIZACION PUT PAYPERITEM
+                                            $http.put('/api/detalles/'+iddetalle,$scope.payupdate).
+                                            success(function(detalles) {
+                                            console.log("Detalle actualizado");
+                                            })
+                                            .error(function(boletas) {
+                                                console.log('Error' + boletas);
+                                            });
+
+                                            //FIN ACTUALIZACION PUT PAYPERITEM
+
+                                var pago = new Pagos({
+                                        idboleta      : idboleta,
+                                        idproducto     : idproducto,
+                                        descripcionproducto     : descripcionproducto,
+                                        precioproducto         : precioproducto,
+                                        cantidadproducto   : cantidadproducto,
+                                        preciofacturado     : preciofacturado,
+                                        monto_pagado       : (parseFloat(pagado) + parseFloat(pendiente)),
+                                        monto_cancelado : pendiente,
+                                        iddetalle: iddetalle,
+                                        fecha_trans   : moment().format()                
+                                    });
+
+                                    // Usar el método '$save' de cliente para enviar una petición POST apropiada
+                                    pago.$save(function(response) {    
+                                    });
+
+                                }
+                                else if(preciofila>monto_pagado && pagadoahora<preciofila && pagadoahora>0){
+
+                                    var pendiente=preciofila-monto_pagado;
+
+                                    //INICIO IF
+                                    if(pagadoahora>pendiente){
+                                        pagadoahora=pagadoahora-pendiente;
+                                         console.log("Aqui pagó: "+pendiente);
+
+                                         console.log("iddetalle es :" +iddetalle);
+
+
+                                    $scope.payelse={"payperitem":pendiente
+                                                            };
+                                            //ACTUALIZACION PUT PAYPERITEM
+                                            $http.put('/api/detalles/'+iddetalle,$scope.payelse).
+                                            success(function(detalles) {
+                                            console.log("Detalle actualizado");
+                                            })
+                                            .error(function(boletas) {
+                                                console.log('Error' + boletas);
+                                            });
+                                            //FIN ACTUALIZACION PUT PAYPERITEM
+
+                                    var pago = new Pagos({
+                                        idboleta      : idboleta,
+                                        idproducto     : idproducto,
+                                        descripcionproducto     : descripcionproducto,
+                                        precioproducto         : precioproducto,
+                                        cantidadproducto   : cantidadproducto,
+                                        preciofacturado     : preciofacturado,
+                                        monto_pagado       : (parseFloat(pagado) + parseFloat(pendiente)),
+                                        monto_cancelado : pendiente,
+                                        iddetalle: iddetalle,
+                                        fecha_trans   : moment().format()                
+                                    });
+
+                                    // Usar el método '$save' de cliente para enviar una petición POST apropiada
+                                    pago.$save(function(response) {    
+                                    });
+                                    }
+                                    //FIN IF
+
+                                    //INICIO ELSE
+                                    else{
+                                        pendiente=preciofila-(monto_pagado+pagadoahora);
+                                         console.log("Aqui pagó: "+pagadoahora);
+
+                                         console.log("iddetalle es :" +iddetalle);
+
+
+                                    $scope.payelse={"payperitem":pagadoahora
+                                                            };
+                                            //ACTUALIZACION PUT PAYPERITEM
+                                            $http.put('/api/detalles/'+iddetalle,$scope.payelse).
+                                            success(function(detalles) {
+                                            console.log("Detalle actualizado");
+                                            })
+                                            .error(function(boletas) {
+                                                console.log('Error' + boletas);
+                                            });
+                                            //FIN ACTUALIZACION PUT PAYPERITEM
+
+                                    var pago = new Pagos({
+                                        idboleta      : idboleta,
+                                        idproducto     : idproducto,
+                                        descripcionproducto     : descripcionproducto,
+                                        precioproducto         : precioproducto,
+                                        cantidadproducto   : cantidadproducto,
+                                        preciofacturado     : preciofacturado,
+                                        monto_pagado       : (parseFloat(pagado) + parseFloat(pagadoahora)),
+                                        monto_cancelado : pagadoahora,
+                                        iddetalle: iddetalle,
+                                        fecha_trans   : moment().format()                
+                                    });
+
+                                    // Usar el método '$save' de cliente para enviar una petición POST apropiada
+                                    pago.$save(function(response) {    
+                                    });
+                                    }
+                                    pagadoahora=0;
+                                }
+                                //FIN ELSE
+
+
+                                }
+                                //DETALLES PAYMENT
+
+                                });         
 
                            }                           
                            else if(pagadoahora>(parseFloat(facturadoantes)-parseFloat(pagadoantes))){
@@ -166,6 +370,13 @@ $rootScope.showcreardetalles=false;
                         })
                 
             };
+
+
+
+
+
+
+
 
 
             //Al cerrar modal

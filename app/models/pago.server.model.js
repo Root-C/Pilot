@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var DetalleSchema = new Schema({
+var PagoSchema = new Schema({
   idboleta: {
     type: Number
   },
@@ -20,22 +20,26 @@ var DetalleSchema = new Schema({
     type:Number,
     default:1
   },
-  descuentoproducto: {
-    type:Number,
-    default:0
-  },
-  preciofinal: {
-    type:Number
-  },
   preciofacturado: {
     type:Number
   },
-  payperitem: {
+  monto_pagado: {
     type:Number,
     default:0
+  },
+  monto_cancelado: {
+    type:Number,
+    default:0
+  },
+
+  fecha_trans: {
+    type: Date,
+    default:Date.now
+  },
+  iddetalle: {
+    type: Schema.ObjectId,
+    ref: 'Detalle'
   }
 });
 
-mongoose.model('Detalle', DetalleSchema);
-
-
+mongoose.model('Pago', PagoSchema);

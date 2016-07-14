@@ -6,7 +6,8 @@
 					<th>Precio Total</th>
 					<th>Cantidad</th>
 					<th>Desc. Aplicado</th>
-					<th>Precio C/U</th>
+					<th>Precio C/U - Sin dcto</th>
+					<th>Precio C/U - Con dcto</th>
 				</tr>
 		</thead>
 		<tbody>
@@ -17,6 +18,7 @@
 					<td>{{item.cantidadproducto}}</td>
 					<td>S/. {{item.descuentoproducto | number:2}}</td>
 					<td>S/. {{item.precioproducto | number:2}}</td>
+					<td class="verde negrita">S/. {{(item.preciofinal-item.descuentoproducto)/item.cantidadproducto | number:2}}</td>
 				</tr>
 		</tbody>
 </table>

@@ -1,0 +1,89 @@
+<section ng-controller="PagosController">
+<form ng-show="true">
+
+<script>
+  $(function() {
+    $( ".datepicker" ).datepicker({
+    dateFormat: 'yy-mm-dd'
+    //altField: '#altpicker',
+        //altFormat: 'yy-mm-dd'
+
+    });
+  });
+  </script>
+
+
+<div class="row">
+  <div class="form-group">
+      <div class="col-md-12">
+        <div class='col-sm-4'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control datepicker" placeholder="Ingrese fecha" ng-model="fechainicio"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+      <div class='col-sm-4'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control datepicker" placeholder="Ingrese fecha" ng-model="fechafin"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+      </div>
+    <div class='col-sm-2'>
+            <div class="form-group">
+                <button class="btn btn-info" ng-click="getPagosByFecha(fechainicio,fechafin)">Individual</button>
+            </div>
+      </div>
+<div class='col-sm-2'>
+            <div class="form-group">
+                <button class="btn btn-warning" ng-click="getPagosByMax(fechainicio,fechafin)">Maximo por item</button>
+            </div>
+      </div>
+
+      </div>
+  </div>
+</div>
+
+</form>
+
+
+<div id="exportable">
+<table class="table table-stripped table-responsive table-bordered" ng-show="true">
+    <thead>
+        <tr>
+         
+          <th class="centrar">Fecha Pago</th>
+           <th class="centrar">Codigo</th>
+          <th class="centrar">Descripcion</th>
+          <th class="centrar">Cantidad</th>
+          <th class="centrar">Tipo</th>
+          <th class="centrar">Precio Venta</th>
+          <th class="centrar">Monto Pagado</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="centrar" ng-repeat="item in pagosxfecha">
+          
+          <td>{{item.fecha_trans | date :  "dd/MM/y" }}</td>
+          <td>{{item.idproducto}}</td>
+          <td>{{item.descripcionproducto}}</td>
+          <td>{{item.cantidadproducto}}</td>
+          <td class="success" ng-show="(item.preciofacturado-item.monto_pagado)==0">T</td>
+          <td class="warning" ng-show="(item.preciofacturado-item.monto_pagado)>0">P</td>
+          <td>{{item.preciofacturado}}</td>
+          <td>{{item.monto_pagado}}</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<button ng-click="exportData()">Exportar</button>
+</section>
