@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
 	Boleta = mongoose.model('Boleta'),
 	Cliente= mongoose.model('Cliente');
 
+
 var boletascant=0;
 
 // Crear un nuevo método controller para el manejo de errores

@@ -32,19 +32,19 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<!--<div class="form-group">
 			<label class="col-md-4 control-label" for=""> Descuento</label>
 				<div class="col-md-4">
 					<input type="text" ng-model="descuentoproducto" placeholder="Descuento" class="form-control input-md"/>
 				</div>
-			</div>
+			</div>-->
 
-			<div class="form-group">
+		<!--	<div class="form-group">
 			<label class="col-md-4 control-label" for=""> Pago Inicial</label>
 				<div class="col-md-4">
 					<input type="text" ng-model="pagoinicial" placeholder="Ingrese monto" class="form-control input-md"/>
 				</div>
-			</div>
+			</div>-->
 
 			<div class="form-group">
 			<label class="col-md-4 control-label" for=""> </label>
@@ -62,8 +62,8 @@
 						<th class="centrar">Descripcion</th>
 						<th class="centrar">Precio Regular</th>
 						<th class="centrar">Cantidad</th>
-						<th class="centrar">Descuento</th>
-						<th class="centrar">Pago inicial</th>
+						<!--<th class="centrar">Descuento</th>
+						<th class="centrar">Pago inicial</th>-->
 						<th class="centrar">Precio Total</th>
 						<th class="centrar">Acciones</th>
 					</tr>
@@ -74,34 +74,34 @@
 						<td class="centrar">{{d.descripcionproducto}}</td>
 						<td class="centrar">S/. {{d.precioproducto | number:0}}</td>
 						<td class="centrar">{{d.cantidadproducto}}</td>
-						<td class="centrar">S/. {{d.descuentoproducto}}</td>
-						<td class="centrar">S/. {{d.payperitem}}</td>
+						<!--<td class="centrar">S/. {{d.descuentoproducto}}</td>
+						<td class="centrar">S/. {{d.payperitem}}</td>-->
 						<td class="centrar">S/. {{d.preciofinal -d.descuentoproducto - d.payperitem}}</td>
 						<td class="centrar"><a ng-click="deleteDetalle(d._id)"><i class="icon-remove"></i></a></td>
 					</tr>
 					<tr>
-						<td colspan="8" class="warning negrita">DETALLE DE COMPRA</td>
+						<td colspan="6" class="warning negrita">DETALLE DE COMPRA</td>
 					</tr>
-					<tr>
-						<td colspan="6" class="negrita">Precio Regular (Sin descuentos ni pagos iniciales): </td>
+					<!--<tr>
+						<td colspan="4" class="negrita">Precio Regular (Sin descuentos ni pagos iniciales): </td>
 						<td class="descuento">S/. {{getParcial()}} </td> 
 						<td class="centrar"><i class="icon-ok"></i></td>
 					</tr>	
 					<tr>
-						<td colspan="6" class="negrita">Total Descuentos : </td>
+						<td colspan="4" class="negrita">Total Descuentos : </td>
 						<td class="centrar">S/. {{getDescuentos()}}</td> 
 						<td class="centrar"><i class="icon-ok"></i></td>
-					</tr>
+					</tr>-->
 					<tr>
-						<td colspan="6" class="negrita">Precio Total : </td>
+						<td colspan="4" class="negrita">Precio Total : </td>
 						<td class="preciofinal">S/. {{getFacturado()}}</td>
 						<td class="centrar"><i class="icon-ok"></i></td>
 					</tr>
-					<tr>
-						<td colspan="6" class="negrita">Pagos realizados: </td>
+					<!--<tr>
+						<td colspan="4" class="negrita">Pagos realizados: </td>
 						<td class="centrar">S/. {{getPPPi()}}</td> 
 						<td class="centrar"><i class="icon-ok"></i></td
-					</tr>
+					</tr>-->
 					
 					
 					

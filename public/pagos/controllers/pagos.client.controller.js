@@ -20,6 +20,7 @@ angular.module('pagos').controller('PagosController',
             $http.get('/api/fecha/' + fechainicio + '/' + fechafin)
             .success(function(data) {
             console.log(data);
+            $scope.tablapagos=true;
             $scope.pagosxfecha=data;
             })
             .error(function(data) {
@@ -32,6 +33,7 @@ angular.module('pagos').controller('PagosController',
             $http.get('/api/max/' + fechainicio + '/' + fechafin)
             .success(function(data) {
             console.log(data);
+            $scope.tablapagos=true;
             $scope.pagosxfecha=data;
             })
             .error(function(data) {
@@ -45,11 +47,13 @@ angular.module('pagos').controller('PagosController',
     for(var i=0; i<$scope.pagosxfecha.length;i++){
         var fila=$scope.pagosxfecha[i];
         var fecha_trans=moment(new Date(fila.fecha_trans)).format("DD/MM/YYYY");
-        var idproducto=fila.idproducto;
-        var descripcionproducto=fila.descripcionproducto;
+        var ref_idproducto=fila.ref_idproducto;
+        var ref_descripcionproducto=fila.ref_descripcionproducto;
         var cantidadproducto=fila.cantidadproducto;
-        var preciofacturado=fila.preciofacturado;
+        var ref_preciofacturado=fila.ref_preciofacturado;
         var monto_pagado=fila.monto_pagado;
+        var monto_cancelado=fila.monto_cancelado;
+        var preciofacturado=fila.preciofacturado;
         if(preciofacturado-monto_pagado==0){
             var tipo="T";
         }
@@ -60,12 +64,12 @@ angular.module('pagos').controller('PagosController',
         $scope.excel=
         {
             FECHA:fecha_trans,
-            CODIGO:idproducto,
-            DESCRIPCION:descripcionproducto,
+            CODIGO:ref_idproducto,
+            DESCRIPCION:ref_descripcionproducto,
             CANTIDAD:cantidadproducto,
             TIPO:tipo,
-            P_VENTA:preciofacturado,
-            INGRESO:monto_pagado
+            P_VENTA:ref_preciofacturado,
+            INGRESO:monto_cancelado
             
         };
 
@@ -73,7 +77,7 @@ angular.module('pagos').controller('PagosController',
     }
 
 
-        alasql('SELECT * INTO XLSX("john.xlsx",{headers:true}) FROM ?',[$scope.hiroshi]);
+        alasql('SELECT * INTO XLSX("Reporte de pagos.xlsx",{headers:true}) FROM ?',[$scope.hiroshi]);
     };
     
  

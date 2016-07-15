@@ -10,6 +10,12 @@ angular.module('clientes').controller('ClientesController',
         $rootScope.showtablebusqueda=false;
         $scope.clientedata=[];
         $rootScope.showbuscarcliente=true;
+        var date=moment();
+        var year=date.format('YYYY');
+        var month=date.format('MM');
+        var day=date.format('DD');
+        
+
  
  
 
@@ -64,7 +70,7 @@ angular.module('clientes').controller('ClientesController',
                 monto_pagado       : monto_pagado + pendiente,
                 monto_cancelado : pendiente,
                 iddetalle: iddetalle,
-                fecha_trans   : moment().format()                
+                fecha_trans   : year+'-'+month+'-'+day              
             });
 
             // Usar el método '$save' de cliente para enviar una petición POST apropiada
@@ -168,7 +174,7 @@ $rootScope.showcreardetalles=false;
 
                 //creamos scope para actualizar data
                 $scope.boleta={"monto_pagado":pagadoahora,
-                                "updated_at":moment().format()
+                                "updated_at":year+'-'+month+'-'+day
                                 };
 
                 //llamamos a la boleta que vamos a actualizar
@@ -220,6 +226,7 @@ $rootScope.showcreardetalles=false;
                                 
 
                                 //DETALLESPAYMENT
+                                //BEGIN FOR
                                 for(var i=0; i < $rootScope.detallepayments.length;i++){
                                   var fila=$rootScope.detallepayments[i];
                                   var preciofila=fila.preciofacturado;
@@ -235,7 +242,7 @@ $rootScope.showcreardetalles=false;
 
 
 
-                                    
+                                //BEGIN IF
                                 if(preciofila>monto_pagado && pagadoahora>=preciofila){
                                     var pendiente=preciofila-monto_pagado;
                                     pagadoahora=pagadoahora-pendiente;
@@ -264,7 +271,10 @@ $rootScope.showcreardetalles=false;
                                         monto_pagado       : (parseFloat(pagado) + parseFloat(pendiente)),
                                         monto_cancelado : pendiente,
                                         iddetalle: iddetalle,
-                                        fecha_trans   : moment().format()                
+                                        ref_idproducto:1,
+                                        ref_preciofacturado:0,
+                                        ref_descripcionproducto:"Pago",
+                                        fecha_trans   : year+'-'+month+'-'+day              
                                     });
 
                                     // Usar el método '$save' de cliente para enviar una petición POST apropiada
@@ -272,11 +282,14 @@ $rootScope.showcreardetalles=false;
                                     });
 
                                 }
+                                //END IF
+
+                                //BEGIN ELSEIF
                                 else if(preciofila>monto_pagado && pagadoahora<preciofila && pagadoahora>0){
 
                                     var pendiente=preciofila-monto_pagado;
 
-                                    //INICIO IF
+                                    //BEGIN 2 TIER IF
                                     if(pagadoahora>pendiente){
                                         pagadoahora=pagadoahora-pendiente;
                                          console.log("Aqui pagó: "+pendiente);
@@ -306,16 +319,19 @@ $rootScope.showcreardetalles=false;
                                         monto_pagado       : (parseFloat(pagado) + parseFloat(pendiente)),
                                         monto_cancelado : pendiente,
                                         iddetalle: iddetalle,
-                                        fecha_trans   : moment().format()                
+                                        ref_idproducto:1,
+                                        ref_preciofacturado:0,
+                                        ref_descripcionproducto:"Pago",
+                                        fecha_trans   : year+'-'+month+'-'+day               
                                     });
 
                                     // Usar el método '$save' de cliente para enviar una petición POST apropiada
                                     pago.$save(function(response) {    
                                     });
                                     }
-                                    //FIN IF
+                                    //END TIER 2 IF
 
-                                    //INICIO ELSE
+                                    //INICIO ELSE TIER 2
                                     else{
                                         pendiente=preciofila-(monto_pagado+pagadoahora);
                                          console.log("Aqui pagó: "+pagadoahora);
@@ -345,22 +361,28 @@ $rootScope.showcreardetalles=false;
                                         monto_pagado       : (parseFloat(pagado) + parseFloat(pagadoahora)),
                                         monto_cancelado : pagadoahora,
                                         iddetalle: iddetalle,
-                                        fecha_trans   : moment().format()                
+                                        ref_idproducto:1,
+                                        ref_preciofacturado:0,
+                                        ref_descripcionproducto:"Pago",
+                                        fecha_trans   : year+'-'+month+'-'+day               
                                     });
 
                                     // Usar el método '$save' de cliente para enviar una petición POST apropiada
                                     pago.$save(function(response) {    
                                     });
                                     }
+                                    //END ELSE TIER2
                                     pagadoahora=0;
                                 }
-                                //FIN ELSE
+                                //END ELSE IF
 
 
                                 }
-                                //DETALLES PAYMENT
+                                //END FOR
+                               
 
-                                });         
+                                });
+                                //END GET         
 
                            }                           
                            else if(pagadoahora>(parseFloat(facturadoantes)-parseFloat(pagadoantes))){

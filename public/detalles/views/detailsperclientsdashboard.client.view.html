@@ -4,9 +4,7 @@
 				<tr>
 					<th>Codigo</th>
 					<th>Descripcion</th>
-					<th>Precio(Sin desc)</th>
 					<th>Cantidad</th>
-					<th>Desc. Aplicado</th>
 					<th>Precio C/U</th>
 					<th>Precio Facturado</th>
 				</tr>
@@ -15,9 +13,7 @@
 				<tr ng-repeat="item in detallesxclientedashboard">
 					<td>{{item.idproducto}}</td>
 					<td>{{item.descripcionproducto}}</td>
-					<td>S/. {{item.preciofinal | number:2}}</td>
 					<td>{{item.cantidadproducto}}</td>
-					<td>S/. {{item.descuentoproducto | number:2}}</td>
 					<td>S/. {{item.precioproducto | number:2}}</td>
 					<td class="negrita">S/. {{item.preciofacturado | number:2}} </td>
 

@@ -266,9 +266,9 @@
                                     <i class="icon-globe"></i>
                                 </div>
                                 <div class="details">
-                                    <div class="number"> +
-                                        <span data-counter="counterup" data-value="89"></span>% </div>
-                                    <div class="desc"> Reportes </div>
+                                    <div class="number"> Reportes
+                                        <!--<span data-counter="counterup" data-value="89"></span>% --></div>
+                                    <div class="desc"> Reportes por fechas </div>
                                 </div>
                             </a>
                         </div>
@@ -350,16 +350,16 @@
                                 <div class="portlet-title">
                                     <div class="caption">
                                         <i class="icon-share font-red-sunglo hide"></i>
-                                    <span class="caption-subject font-dark bold uppercase">Vista rápida de deudores</span>
+                                    <span class="caption-subject font-dark bold uppercase">Últimos productos vendidos
                                     </div>
                               
                                     <div class="row">
                                         <div class="col-md-12">
 
                                            <div class="input-group">
-                                                <input type="text" class="form-control input-sm"/> 
+                                                <input type="text" class="form-control input-sm" ng-model="items"/> 
                                                 <div class="input-group-btn">
-                                                <button type="button" ng-click="GetClientbyLastName(ape)" class="btn btn-default btn-sm">Buscar</button>
+                                                <button type="button" ng-click="GetClientbyLastName(ape)" class="btn btn-default btn-sm">Filtrar</button>
                                                 </div>
                                             </div>
                                          </div>
@@ -369,30 +369,27 @@
                                    
                                 
                                 </div>
-                                <div class="portlet-body" ng-controller="BoletasController">
-                                    <table class="table table-responsive table-striped centrar10" ng-init="getTopTenUpdated()">
+                                <div class="portlet-body" ng-controller="DetallesController">
+                                    <table class="table table-responsive table-striped centrar10" ng-init="getTopTenDetails()">
                                         <thead>
                                             <tr class="headervisits">
-                                                <th>Nombre Cliente</th>
-                                                <th>Fecha Transaccion</th>
-                                                <th>Facturado</th>
-                                                <th>Pagado</th>
-                                                <th>Pendiente</th>
-                                                <th>Ver</th>
+                                                <th>Id Producto</th>
+                                                <th>Nombre Producto</th>
+                                                <th>Precio</th>
+                                                <th>Cantidad</th>
+                                                <th>Costo de venta</th>
+                            
                                                 
                                             
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="item in toptendate">
-                                                <td>{{item.idcliente.nombre_cliente}} {{item.idcliente.ape_pat_cliente}} {{item.idcliente.ape_mat_cliente}}</td>
-                                                <td>{{item.fecha_trans | date :  "dd/MM/y"}}</td>
-                                                <td>S/. {{item.monto_facturado}}</td>
-                                                <td>S/. {{item.monto_pagado}}</td>
-                                                <td class="verde">S/. {{item.monto_facturado - item.monto_pagado | number:0}}</td>
-                                                <td ng-controller="DetallesController">
-                                                 <a ng-click="getDetailsForNumBoleta(item.idboleta)" role="button" data-toggle="modal" data-target="#detallesxcliente"><i class="icon-search"></i></a>
-                                                </td>
+                                            <tr ng-repeat="item in toptendetalles | filter:items">
+                                                <td>{{item.idproducto}}</td>
+                                                <td>{{item.descripcionproducto}}</td>
+                                                <td>S/. {{item.precioproducto | number:2}}</td>
+                                                <td>{{item.cantidadproducto}}</td>
+                                                <td>S/. {{item.preciofacturado | number:2}}</td>
                                             </tr>
 
 

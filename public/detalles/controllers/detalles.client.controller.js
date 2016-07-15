@@ -132,7 +132,18 @@ angular.module('detalles').controller('DetallesController',
         }
 
 
+    $scope.getTopTenDetails=function(){
 
+      $http.get('/api/detallestop10')
+            .success(function(data) {
+            $rootScope.toptendetalles=data;
+                       
+    
+            })
+            .error(function(data) {
+                console.log('Error' + data);
+            })
+}
 
 
 

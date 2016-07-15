@@ -61,17 +61,27 @@ var end=req.params.end;
 	Pago.aggregate([
         { $match: { "fecha_trans": { "$gte": new Date(start), "$lt": new Date(end) } } },
         { $group: { 
+        	
         	_id: "$iddetalle", 
         	fecha_trans : { $max: '$fecha_trans' },
-        	idproducto :  { $first: '$idproducto' },
-        	descripcionproducto : { $first: '$descripcionproducto' },
+
+        	//Artificio de Alias, nombre verdadero idproducto
+        	ref_idproducto :  { $first: '$idproducto' },
+
+        	//Artificio de Alias, nombre verdadero descripcionproducto
+        	ref_descripcionproducto : { $first: '$descripcionproducto' },
         	cantidadproducto : { $first: '$cantidadproducto' },
         	monto_cancelado : { $first: '$monto_cancelado' },
-        	preciofacturado : { $first: '$preciofacturado' },
 
-        	monto_pagado: { $max: "$monto_pagado" } } }]).exec(function(err, pagos) {
+        	//Artificio de Alias, nombre verdadero prefiofacturado
+        	ref_preciofacturado : { $first: '$preciofacturado' },
+
+        	//Artificio de Alias, nombre verdadero monto_pagado
+        	monto_cancelado: { $max: "$monto_pagado" } } }])
+
+	.exec(function(err, pagos) {
 		if (err) return next(err);
-		if (!pagos) return next(new Error('Fallo al cargar la boleta ' + id));
+		if (!pagos) return next(new Error('Fallo al cargar '));
 
 		// Si un artículo es encontrado usar el ojeto 'request' para pasarlo al siguietne middleware
 		req.paymentbydatemax = pagos;

@@ -31,15 +31,23 @@ var PagoSchema = new Schema({
     type:Number,
     default:0
   },
-
   fecha_trans: {
     type: Date,
     default:Date.now
+  },
+  ref_preciofacturado: {
+    type:Number
+  },
+  ref_idproducto: {
+    type:String
+  },
+  ref_descripcionproducto:{
+    type:String
   },
   iddetalle: {
     type: Schema.ObjectId,
     ref: 'Detalle'
   }
 });
-
 mongoose.model('Pago', PagoSchema);
+

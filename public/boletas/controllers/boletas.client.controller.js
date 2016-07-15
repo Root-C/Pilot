@@ -9,7 +9,10 @@ angular.module('boletas').controller('BoletasController',
         $scope.authentication = Authentication;
         $scope.clientedata=[];
         $scope.monto_pagado="";
-
+        var date=moment();
+        var year=date.format('YYYY');
+        var month=date.format('MM');
+        var day=date.format('DD');
         
 
 
@@ -17,18 +20,18 @@ angular.module('boletas').controller('BoletasController',
         $scope.createBoleta = function() {
             // Usar los campos form para crear un nuevo objeto $resource Boleta
             var boleta = new Boletas({
-              idcliente: $rootScope.idcliente
-             
+              idcliente: $rootScope.idcliente,
+              fecha_trans:year+'-'+month+'-'+day,
+              updated_at:year+'-'+month+'-'+day
 
             });
 
             // Usar el método '$save' de boleta para enviar una petición POST apropiada
             boleta.$save(function(response) {
-
                 // Si un artículo fue creado de modo correcto, redireccionar al usuario a la página del artículo 
                 //$location.path('boletas/' + response._id);
                 if($rootScope.idcliente){
-               
+
                 console.log("el id del cliente es: " + $rootScope.idcliente);
                  $rootScope.idboleta = response.idboleta;
                  $rootScope._id=response._id;
@@ -84,7 +87,227 @@ angular.module('boletas').controller('BoletasController',
         };
 
 
+         $scope.actualizar1=function(id){
+            var pagadoahora=this.monto_pagado;
+            //monto pagado, el monto que se paga por item, en totales
+            //monto_total= el monto que se calcula sin descuentos
+            //monto_descontado= el monto descontado total
+            //monto_facturado, el total con descuentos.
+            $scope.boleta=
+            {
+              "monto_pagado":pagadoahora,
+              "monto_total":$rootScope.parcial,
+              "monto_descontado":$rootScope.desc,
+              "monto_facturado":$rootScope.facturado,
+              "updated_at":year+'-'+month+'-'+day,
+              "status":1
+            };
+       
+
+            $http.put('/api/boletas/'+id,$scope.boleta)
+            .success(function(data) {
+            //ACTUALIZA BOLETA FIN
+
+            var idboleta=data.idboleta;
+            //SUCCESS PUT
+            $scope.boleta = {};
+            $rootScope.monto_pagado="";
+            $rootScope.showcreardetalles=false;
+            $rootScope.showclientname=false;
+            $rootScope.showtablebusqueda=false;
+            $rootScope.showbuscarcliente=true;
+            $rootScope.tabledetalles=false;
+            $scope.getTopTen();
+            $scope.getTopTenDetails();
+            alertify.alert("Venta realizada con éxito");
+            $('#registrarventa').modal('toggle');
+  
+
+
+                    //BEGIN HTTPGET
+                     $http.get('/api/detalle/' + idboleta)
+                                .success(function(data) {
+                                //Asigno el array a un scope
+                                $rootScope.detallepayments=data;
+
+                                
+                                //BEGIN FOR
+                                for(var i=0; i < $rootScope.detallepayments.length;i++){
+                                  var fila=$rootScope.detallepayments[i];
+                                  var preciofila=fila.preciofacturado;
+                                  var monto_pagado=fila.payperitem;
+                                  var iddetalle=fila._id;
+                                  var idboleta=fila.idboleta;
+                                  var idproducto=fila.idproducto;
+                                  var descripcionproducto=fila.descripcionproducto;
+                                  var preciofacturado=fila.preciofacturado;
+                                  var cantidadproducto=fila.cantidadproducto;
+                                  var precioproducto=preciofacturado/cantidadproducto;
+                                  var pagado=fila.payperitem;
+
+
+
+                                //BEGIN IF
+                                if(preciofila>monto_pagado && pagadoahora>=preciofila){
+                                    var pendiente=preciofila-monto_pagado;
+                                    pagadoahora=pagadoahora-pendiente;
+                                    console.log("pagó "+pendiente);
+                                    console.log("iddetalle es :" +iddetalle);
+                                    $scope.payupdate={"payperitem":pendiente
+                                                            };
+                                            //ACTUALIZACION PUT PAYPERITEM
+                                            $http.put('/api/detalles/'+iddetalle,$scope.payupdate).
+                                            success(function(detalles) {
+                                            console.log("Detalle actualizado");
+                                            })
+                                            .error(function(boletas) {
+                                                console.log('Error' + boletas);
+                                            });
+
+                                            //FIN ACTUALIZACION PUT PAYPERITEM
+
+                                var pago = new Pagos({
+                                        idboleta      : idboleta,
+                                        idproducto     : idproducto,
+                                        descripcionproducto     : descripcionproducto,
+                                        precioproducto         : precioproducto,
+                                        cantidadproducto   : cantidadproducto,
+                                        preciofacturado     : preciofacturado,
+                                        monto_pagado       : (parseFloat(pagado) + parseFloat(pendiente)),
+                                        monto_cancelado : pendiente,
+                                        iddetalle: iddetalle,
+                                        ref_idproducto:idproducto,
+                                        ref_preciofacturado:preciofacturado,
+                                        ref_descripcionproducto:descripcionproducto,
+                                        fecha_trans   :year+'-'+month+'-'+day                
+                                    });
+
+                                    // Usar el método '$save' de cliente para enviar una petición POST apropiada
+                                    pago.$save(function(response) {    
+                                    });
+
+                                }
+                                //END IF
+
+                                //BEGIN ELSEIF
+                                else if(preciofila>monto_pagado && pagadoahora<preciofila && pagadoahora>0){
+
+                                    var pendiente=preciofila-monto_pagado;
+
+                                    //BEGIN 2 TIER IF
+                                    if(pagadoahora>pendiente){
+                                        pagadoahora=pagadoahora-pendiente;
+                                         console.log("Aqui pagó: "+pendiente);
+
+                                         console.log("iddetalle es :" +iddetalle);
+
+
+                                    $scope.payelse={"payperitem":pendiente
+                                                            };
+                                            //ACTUALIZACION PUT PAYPERITEM
+                                            $http.put('/api/detalles/'+iddetalle,$scope.payelse).
+                                            success(function(detalles) {
+                                            console.log("Detalle actualizado");
+                                            })
+                                            .error(function(boletas) {
+                                                console.log('Error' + boletas);
+                                            });
+                                            //FIN ACTUALIZACION PUT PAYPERITEM
+
+                                    var pago = new Pagos({
+                                        idboleta      : idboleta,
+                                        idproducto     : idproducto,
+                                        descripcionproducto     : descripcionproducto,
+                                        precioproducto         : precioproducto,
+                                        cantidadproducto   : cantidadproducto,
+                                        preciofacturado     : preciofacturado,
+                                        monto_pagado       : (parseFloat(pagado) + parseFloat(pendiente)),
+                                        monto_cancelado : pendiente,
+                                        iddetalle: iddetalle,
+                                        ref_idproducto:idproducto,
+                                        ref_preciofacturado:preciofacturado,
+                                        ref_descripcionproducto:descripcionproducto,
+                                        fecha_trans   : year+'-'+month+'-'+day               
+                                    });
+
+                                    // Usar el método '$save' de cliente para enviar una petición POST apropiada
+                                    pago.$save(function(response) {    
+                                    });
+                                    }
+                                    //END TIER 2 IF
+
+                                    //INICIO ELSE TIER 2
+                                    else{
+                                        pendiente=preciofila-(monto_pagado+pagadoahora);
+                                         console.log("Aqui pagó: "+pagadoahora);
+
+                                         console.log("iddetalle es :" +iddetalle);
+
+
+                                    $scope.payelse={"payperitem":pagadoahora
+                                                            };
+                                            //ACTUALIZACION PUT PAYPERITEM
+                                            $http.put('/api/detalles/'+iddetalle,$scope.payelse).
+                                            success(function(detalles) {
+                                            console.log("Detalle actualizado");
+                                            })
+                                            .error(function(boletas) {
+                                                console.log('Error' + boletas);
+                                            });
+                                            //FIN ACTUALIZACION PUT PAYPERITEM
+
+                                    var pago = new Pagos({
+                                        idboleta      : idboleta,
+                                        idproducto     : idproducto,
+                                        descripcionproducto     : descripcionproducto,
+                                        precioproducto         : precioproducto,
+                                        cantidadproducto   : cantidadproducto,
+                                        preciofacturado     : preciofacturado,
+                                        monto_pagado       : (parseFloat(pagado) + parseFloat(pagadoahora)),
+                                        monto_cancelado : pagadoahora,
+                                        iddetalle: iddetalle,
+                                        ref_idproducto:idproducto,
+                                        ref_preciofacturado:preciofacturado,
+                                        ref_descripcionproducto:descripcionproducto,
+                                        fecha_trans   : year+'-'+month+'-'+day                
+                                    });
+
+                                    // Usar el método '$save' de cliente para enviar una petición POST apropiada
+                                    pago.$save(function(response) {    
+                                    });
+                                    }
+                                    //END ELSE TIER2
+                                    pagadoahora=0;
+                                }
+                                //END ELSE IF
+
+
+                                }
+                                //END FOR
+              
+                        
+
+
+
+
+
+
+
+                     });
+                    //END HTTP GET
+
+            //FIN SUCESS PUT
+            });
+
+
+};
+
+
+
+
         $scope.actualizar=function(id){
+            var hiroshi=this.monto_pagado;
+            alertify.alert("el monto pagado es: "+hiroshi);
             //monto pagado, el monto que se paga por item, en totales
             //monto_total= el monto que se calcula sin descuentos
             //monto_descontado= el monto descontado total
@@ -95,7 +318,7 @@ angular.module('boletas').controller('BoletasController',
               "monto_total":$rootScope.parcial,
               "monto_descontado":$rootScope.desc,
               "monto_facturado":$rootScope.facturado,
-              "updated_at":moment().format(),
+              "updated_at":year+'-'+month+'-'+day,
               "status":1
             };
        
@@ -131,7 +354,10 @@ angular.module('boletas').controller('BoletasController',
                         monto_pagado       : monto_pagado,
                         monto_cancelado : monto_pagado,
                         iddetalle: iddetalle,
-                        fecha_trans   : moment().format()                
+                        ref_idproducto:idproducto,
+                        ref_preciofacturado:preciofacturado,
+                        ref_descripcionproducto:descripcionproducto,
+                        fecha_trans   :year+'-'+month+'-'+day                
                     });
                     pago.$save(function(response) { 
                     alertify.alert("Se registro el pago");   
@@ -140,7 +366,6 @@ angular.module('boletas').controller('BoletasController',
                 }    
             
             $rootScope.detalles=[];
-            $scope.getTopTen();
             $('#registrarventa').modal('toggle');
              alertify.log("Venta Realizada correctamente");
             })

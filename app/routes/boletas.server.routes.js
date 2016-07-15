@@ -26,6 +26,7 @@ module.exports = function(app) {
 	app.route('/api/boleta/:ClienteID')
 	   .get(boletas.boletaByClient);
 
+
 	//app.route('/api/fecha/:start/:end')
 	//	.get(boletas.boletaByDate);
 

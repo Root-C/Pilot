@@ -55,17 +55,21 @@
 
 
 <div id="exportable">
-<table class="table table-stripped table-responsive table-bordered" ng-show="true">
+<table class="table table-stripped table-responsive table-bordered" ng-show="tablapagos">
+<caption><button class="btn btn-success btn-sm" ng-click="exportData()">Exportar a excel</button>
+</caption>
     <thead>
         <tr class="headercenter">
          
           <th class="centrar">Fecha Pago</th>
-           <th class="centrar">Codigo</th>
+          <th class="centrar">Codigo</th>
           <th class="centrar">Descripcion</th>
           <th class="centrar">Cantidad</th>
           <th class="centrar">Tipo</th>
           <th class="centrar">Precio Venta</th>
-          <th class="centrar">Monto Pagado</th>
+          <th class="centrar">Ingreso</th>
+          <th class="centrar">Pendiente</th>
+
 
         </tr>
     </thead>
@@ -73,17 +77,20 @@
         <tr class="centrar" ng-repeat="item in pagosxfecha">
           
           <td>{{item.fecha_trans | date :  "dd/MM/y" }}</td>
-          <td>{{item.idproducto}}</td>
-          <td>{{item.descripcionproducto}}</td>
+
+          <td>{{item.ref_idproducto}}</td>
+          <td>{{item.ref_descripcionproducto}}</td>
           <td>{{item.cantidadproducto}}</td>
+
           <td class="success" ng-show="(item.preciofacturado-item.monto_pagado)==0">T</td>
           <td class="warning" ng-show="(item.preciofacturado-item.monto_pagado)>0">P</td>
-          <td>{{item.preciofacturado}}</td>
-          <td>{{item.monto_pagado}}</td>
+
+          <td>{{item.ref_preciofacturado}}</td>
+          <td>{{item.monto_cancelado}}</td>
+          <td>{{item.ref_preciofacturado - item.monto_cancelado}}</td>
         </tr>
     </tbody>
 </table>
 </div>
 
-<button ng-click="exportData()">Exportar</button>
 </section>

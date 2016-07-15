@@ -20,6 +20,9 @@ module.exports = function(app) {
 	app.route('/api/detalle/:idboleta')
 	 	.get(detalles.listdetallesxboleta);
 
+	 
+	 app.route('/api/detallestop10')
+	.get(detalles.listTopTen);
 	// Configurar el parámetro middleware 'detalleId'   
 	app.param('detalleId', detalles.detalleByID);
 	app.param('idboleta', detalles.detallesForNum);

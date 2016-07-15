@@ -53,6 +53,20 @@ exports.list = function(req, res) {
 	});
 };
 
+exports.listTopTen = function(req, res) {
+	// Usar el método model 'find' para obtener una lista de artículos
+	Detalle.find().sort('-idboleta').limit(10).exec(function(err, detalles) {
+		if (err) {
+			// Si un error ocurre enviar un mensaje de error
+			return res.status(400).send({
+				message: getErrorMessage(err)
+			});
+		} else {
+			// Enviar una representación JSON del artículo 
+			res.json(detalles);
+		}
+	});
+};
 
 // Crear un nuevo controller middleware que recupera un único artículo existente PARAMETRIZA A LOS DEMAS
 exports.detalleByID = function(req, res, next, id) {
