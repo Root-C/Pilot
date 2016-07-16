@@ -136,17 +136,36 @@ angular.module('clientes').controller('ClientesController',
             $rootScope.boletapayments=true;
 
                $scope.boletasxcliente=data;
-
+               $rootScope.boletasxc=data;
+               $scope.getFacturadoByClient();
+               $scope.getCanceladoByClient();
             })
             .error(function(data) {
                 console.log('Error' + data);
             });
-
-
-
         };
 
 
+         $scope.getFacturadoByClient=function(){
+            $rootScope.facturadoxc=0;
+            for(var i = 0; i < $rootScope.boletasxc.length; i++){
+            var boleta = $rootScope.boletasxc[i];
+            $rootScope.facturadoxc += boleta.monto_facturado;
+            }
+            return $rootScope.facturadoxc;
+                    
+        }
+
+
+         $scope.getCanceladoByClient=function(){
+            $rootScope.pagadoxc=0;
+            for(var i = 0; i < $rootScope.boletasxc.length; i++){
+            var boleta = $rootScope.boletasxc[i];
+            $rootScope.pagadoxc += boleta.monto_pagado;
+            }
+            return $rootScope.pagadoxc;
+                    
+        }
 
 
           
@@ -171,6 +190,13 @@ $rootScope.showcreardetalles=false;
             $scope.actualizarPago=function(id){
                 //igualamos el scope montoapagar a la variable pagadoahora
                 var pagadoahora=this.montoapagar;
+                //Fecha personalizada, temporal
+                if($rootScope.fechapago){
+                    var fechapersonalizada=$rootScope.fechapago;
+                }
+                else{
+                    var fechapersonalizada=year+'-'+month+'-'+day;
+                }
 
                 //creamos scope para actualizar data
                 $scope.boleta={"monto_pagado":pagadoahora,
@@ -187,6 +213,9 @@ $rootScope.showcreardetalles=false;
                             //capturamos el valor anterior pagado
                            var pagadoantes=$scope.boletaxid.monto_pagado;
                            var idboleta=$scope.boletaxid.idboleta;
+
+                           $rootScope.dataClient=data.idcliente.nombre_cliente +' ' + data.idcliente.ape_pat_cliente;
+
 
                            //Capturo el valor facturado de la boleta en mencion
                            var facturadoantes=$scope.boletaxid.monto_facturado;
@@ -274,7 +303,9 @@ $rootScope.showcreardetalles=false;
                                         ref_idproducto:1,
                                         ref_preciofacturado:0,
                                         ref_descripcionproducto:"Pago",
-                                        fecha_trans   : year+'-'+month+'-'+day              
+                                        fecha_trans:fechapersonalizada,
+                                        //fecha_trans   : year+'-'+month+'-'+day,
+                                        nombre_cliente:$rootScope.dataClient              
                                     });
 
                                     // Usar el método '$save' de cliente para enviar una petición POST apropiada
@@ -322,7 +353,9 @@ $rootScope.showcreardetalles=false;
                                         ref_idproducto:1,
                                         ref_preciofacturado:0,
                                         ref_descripcionproducto:"Pago",
-                                        fecha_trans   : year+'-'+month+'-'+day               
+                                        fecha_trans:fechapersonalizada,
+                                        //fecha_trans   : year+'-'+month+'-'+day,
+                                        nombre_cliente:$rootScope.dataClient               
                                     });
 
                                     // Usar el método '$save' de cliente para enviar una petición POST apropiada
@@ -364,7 +397,9 @@ $rootScope.showcreardetalles=false;
                                         ref_idproducto:1,
                                         ref_preciofacturado:0,
                                         ref_descripcionproducto:"Pago",
-                                        fecha_trans   : year+'-'+month+'-'+day               
+                                        fecha_trans:fechapersonalizada,
+                                        //fecha_trans   : year+'-'+month+'-'+day,
+                                        nombre_cliente:$rootScope.dataClient               
                                     });
 
                                     // Usar el método '$save' de cliente para enviar una petición POST apropiada
@@ -373,6 +408,7 @@ $rootScope.showcreardetalles=false;
                                     }
                                     //END ELSE TIER2
                                     pagadoahora=0;
+                                    $rootScope.fechapago="";
                                 }
                                 //END ELSE IF
 

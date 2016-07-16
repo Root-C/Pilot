@@ -13,16 +13,35 @@ angular.module('boletas').controller('BoletasController',
         var year=date.format('YYYY');
         var month=date.format('MM');
         var day=date.format('DD');
+        $scope.boletasxnum=[];
+
+        
         
 
 
  // Crear un nuevo método controller para crear nuevos Boletas
         $scope.createBoleta = function() {
+
+            //Temporal para fecha
+            if($scope.fecha){
+           $rootScope.fecha_venta=$scope.fecha;
+                }
+            else{
+            $rootScope.fecha_venta=year+'-'+month+'-'+day;
+            }
+             $scope.fecha="";
+             
+
+
+
+
             // Usar los campos form para crear un nuevo objeto $resource Boleta
             var boleta = new Boletas({
               idcliente: $rootScope.idcliente,
-              fecha_trans:year+'-'+month+'-'+day,
-              updated_at:year+'-'+month+'-'+day
+              //fecha_trans:year+'-'+month+'-'+day,
+              fecha_trans: $rootScope.fecha_venta,
+              //updated_at:year+'-'+month+'-'+day
+              updated_at: $rootScope.fecha_venta
 
             });
 
@@ -109,6 +128,9 @@ angular.module('boletas').controller('BoletasController',
             //ACTUALIZA BOLETA FIN
 
             var idboleta=data.idboleta;
+            $rootScope.dataCliente=data.idcliente.nombre_cliente +' ' + data.idcliente.ape_pat_cliente;
+            
+
             //SUCCESS PUT
             $scope.boleta = {};
             $rootScope.monto_pagado="";
@@ -179,7 +201,9 @@ angular.module('boletas').controller('BoletasController',
                                         ref_idproducto:idproducto,
                                         ref_preciofacturado:preciofacturado,
                                         ref_descripcionproducto:descripcionproducto,
-                                        fecha_trans   :year+'-'+month+'-'+day                
+                                        fecha_trans:$rootScope.fecha_venta,
+                                        //fecha_trans   :year+'-'+month+'-'+day,
+                                        nombre_cliente: $rootScope.dataCliente               
                                     });
 
                                     // Usar el método '$save' de cliente para enviar una petición POST apropiada
@@ -227,7 +251,9 @@ angular.module('boletas').controller('BoletasController',
                                         ref_idproducto:idproducto,
                                         ref_preciofacturado:preciofacturado,
                                         ref_descripcionproducto:descripcionproducto,
-                                        fecha_trans   : year+'-'+month+'-'+day               
+                                        fecha_trans:$rootScope.fecha_venta,
+                                        //fecha_trans   : year+'-'+month+'-'+day,
+                                        nombre_cliente:$rootScope.dataCliente               
                                     });
 
                                     // Usar el método '$save' de cliente para enviar una petición POST apropiada
@@ -269,7 +295,9 @@ angular.module('boletas').controller('BoletasController',
                                         ref_idproducto:idproducto,
                                         ref_preciofacturado:preciofacturado,
                                         ref_descripcionproducto:descripcionproducto,
-                                        fecha_trans   : year+'-'+month+'-'+day                
+                                        fecha_trans:$rootScope.fecha_venta,
+                                        //fecha_trans   : year+'-'+month+'-'+day,
+                                        nombre_cliente: $rootScope.dataCliente                
                                     });
 
                                     // Usar el método '$save' de cliente para enviar una petición POST apropiada
@@ -278,6 +306,13 @@ angular.module('boletas').controller('BoletasController',
                                     }
                                     //END ELSE TIER2
                                     pagadoahora=0;
+                                    $rootScope.dataCliente="";
+                                    $rootScope.fecha_venta="";
+
+
+
+                                    //OPCIONAL 
+
                                 }
                                 //END ELSE IF
 

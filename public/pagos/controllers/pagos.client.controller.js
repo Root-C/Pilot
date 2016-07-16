@@ -46,6 +46,7 @@ angular.module('pagos').controller('PagosController',
     $scope.hiroshi=[];
     for(var i=0; i<$scope.pagosxfecha.length;i++){
         var fila=$scope.pagosxfecha[i];
+        var nombre_cliente=fila.nombre_cliente;
         var fecha_trans=moment(new Date(fila.fecha_trans)).format("DD/MM/YYYY");
         var ref_idproducto=fila.ref_idproducto;
         var ref_descripcionproducto=fila.ref_descripcionproducto;
@@ -63,6 +64,7 @@ angular.module('pagos').controller('PagosController',
 
         $scope.excel=
         {
+            NOMBRE:nombre_cliente,
             FECHA:fecha_trans,
             CODIGO:ref_idproducto,
             DESCRIPCION:ref_descripcionproducto,

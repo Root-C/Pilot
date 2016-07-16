@@ -44,6 +44,10 @@ var PagoSchema = new Schema({
   ref_descripcionproducto:{
     type:String
   },
+  nombre_cliente:{
+    type:String
+  },
+
   iddetalle: {
     type: Schema.ObjectId,
     ref: 'Detalle'

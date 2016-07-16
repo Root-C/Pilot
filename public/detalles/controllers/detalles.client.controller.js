@@ -106,9 +106,7 @@ angular.module('detalles').controller('DetallesController',
 
 
 
-
-
-        $scope.getFacturado=function(){
+         $scope.getFacturado=function(){
             $rootScope.facturado=0;
             for(var i = 0; i < $rootScope.detalles.length; i++){
             var detalle = $rootScope.detalles[i];
@@ -117,6 +115,9 @@ angular.module('detalles').controller('DetallesController',
             return $rootScope.facturado;
                     
         }
+
+
+
 
         //Get Partial Pay Per Item
         $scope.getPPPi=function() {

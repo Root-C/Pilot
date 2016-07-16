@@ -26,6 +26,8 @@ module.exports = function(app) {
 	app.route('/api/boleta/:ClienteID')
 	   .get(boletas.boletaByClient);
 
+	app.route('/api/boletasxnum/:idboleta')
+		.get(boletas.boletasnum);
 
 	//app.route('/api/fecha/:start/:end')
 	//	.get(boletas.boletaByDate);
@@ -33,6 +35,7 @@ module.exports = function(app) {
 	// Configurar el parámetro middleware 'articleId'  
 	app.param('boletaId', boletas.boletaByID);
 	app.param('ClienteID', boletas.boletaByClientID);
+	app.param('idboleta',boletas.boletasForNum);
 	//app.param(['start', 'end'],boletas.boletaByDates); 
 	//app.param('end',boletas.boletaByDates); 
 

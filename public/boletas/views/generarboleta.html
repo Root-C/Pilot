@@ -1,8 +1,19 @@
 </section>
 
 <section ng-show="boletagenerate" name="generateBoleta" ng-controller="BoletasController">
-<br/>
+<script>
+  $(function() {
+    $( "#datepicker" ).datepicker({
+		dateFormat: 'yy-mm-dd'
+		//altField: '#altpicker',
+        //altFormat: 'yy-mm-dd'
 
+    });
+  });
+  </script>
+<br/>
+Elige Fecha de creación
+<input type="text" id="datepicker" class="form-control" ng-model="fecha"/>
 <a ng-click="createBoleta()" role="button">Generar boleta</a>
 <br/>
 </section>

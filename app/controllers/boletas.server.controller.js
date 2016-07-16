@@ -120,7 +120,7 @@ exports.boletaByID = function(req, res, next, id) {
 
 exports.boletaByClientID = function(req,res,next,id){
 	
-	Boleta.find({'idcliente' : id,status: 1}).populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
+	Boleta.find({'idcliente' : id,status: 1}).sort('-idboleta').populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente').exec(function(err, boletas) {
 		if (err) return next(err);
 		if (!boletas) return next(new Error('Fallo al cargar la boleta ' + id));
 
@@ -153,6 +153,29 @@ var end=req.params.end;
 		next();
 	});
 
+};
+
+
+exports.boletasForNum = function(req, res, next, idboleta) {
+	var idboleta = req.params.idboleta;
+	// Usar el método model para encontrar un único detalle 
+		Boleta.find({'idboleta' : (idboleta)},function(err, boletas) {
+		if(err){
+			
+			console.log(err);
+		}
+		req.boletasxn = boletas;
+
+		// Llamar al siguiente middleware
+		next();
+
+        }).populate('idcliente', 'nombre_cliente ape_pat_cliente ape_mat_cliente');
+		
+	};
+
+
+exports.boletasnum = function(req, res) {
+	res.json(req.boletasxn);
 };
 
 
@@ -212,6 +235,9 @@ exports.update = function(req, res) {
 	boleta.updated_at=req.body.updated_at;
 	}
 	
+	if(req.body.status){
+	boleta.status=req.body.status;
+	}
 	
 
 

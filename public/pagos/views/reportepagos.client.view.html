@@ -60,7 +60,7 @@
 </caption>
     <thead>
         <tr class="headercenter">
-         
+          <th class="centrar">Nombre Cliente</th>
           <th class="centrar">Fecha Pago</th>
           <th class="centrar">Codigo</th>
           <th class="centrar">Descripcion</th>
@@ -75,9 +75,8 @@
     </thead>
     <tbody>
         <tr class="centrar" ng-repeat="item in pagosxfecha">
-          
+         <td>{{item.nombre_cliente}}</td> 
           <td>{{item.fecha_trans | date :  "dd/MM/y" }}</td>
-
           <td>{{item.ref_idproducto}}</td>
           <td>{{item.ref_descripcionproducto}}</td>
           <td>{{item.cantidadproducto}}</td>
